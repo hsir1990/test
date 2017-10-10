@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	var  i = 1;
+	function  tao(){
+		i++;
+		console.log('i'+i)//最先打印2,3,4,5
+		if(i > 4){
+			console.log('iI'+i);//中间打印
+			tao();
+			console.log(i);//打印3次5
+		}
+	}
+	tao();
+	// 打印顺序
+ // i2
+ // i3
+ // i4
+ // i5
+ // iI5
+ // 5
+ // 5
+ // 5
+</script>
+</body>
+</html>

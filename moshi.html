@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模式</title>
+</head>
+<body>
+<h1>Dave Matthews vids</h1>
+<p><span id="toggle-all">全选/反选</span></p>
+<ol id="vids">
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--2158073">Gravedigger</a></li>
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--4472739">Save Me</a></li>
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--45286339">Crush</a></li>
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--2144530">Don't Drink The Water</a></li>
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--217241800">Funny the Way It Is</a></li>
+  <li><input type="checkbox" checked><a href="http://new.music.yahoo.com/videos/--2144532">What Would You Say</a>
+</li>
+</ol>
+
+<script type="text/javascript">
+// 好了，开始，没有jQuery，我们自定义一个选择器：
+
+var $ = function (id) {
+    return document.getElementById(id);
+};
+// 由于Yahoo的json服务提供了callback参数，所以我们传入我们自定义的callback以便来接受数据，具体查询字符串拼装代码如下：
+
+var http = {
+    makeRequest: function (ids, callback) {
+        var url = 'http://query.yahooapis.com/v1/public/yql?q=',
+            sql = 'select * from music.video.id where ids IN ("%ID%")',
+            format = "format=json",
+            handler = "callback=" + callback,
+            script = document.createElement('script');
+
+            sql = sql.replace('%ID%', ids.join('","'));
+            sql = encodeURIComponent(sql);
+
+            url += sql + '&' + format + '&' + handler;
+            script.src = url;
+
+        document.body.appendChild(script);
+    }
+};
+// 代理对象如下：
+
+var proxy = {
+    ids: [],
+    delay: 50,
+    timeout: null,
+    callback: null,
+    context: null,
+    // 设置请求的id和callback以便在播放的时候触发回调
+    makeRequest: function (id, callback, context) {
+
+        // 添加到队列dd to the queue
+        this.ids.push(id);
+
+        this.callback = callback;
+        this.context = context;
+
+        // 设置timeout
+        if (!this.timeout) {
+            this.timeout = setTimeout(function () {
+                proxy.flush();
+            }, this.delay);
+        }
+    },
+    // 触发请求，使用代理职责调用了http.makeRequest
+    flush: function () {
+        // proxy.handler为请求yahoo时的callback
+        http.makeRequest(this.ids, 'proxy.handler'); 
+        // 请求数据以后，紧接着执行proxy.handler方法（里面有另一个设置的callback)
+        
+        // 清楚timeout和队列
+        this.timeout = null;
+        this.ids = [];
+
+    },
+    handler: function (data) {
+        var i, max;
+
+        // 单个视频的callback调用
+        if (parseInt(data.query.count, 10) === 1) {
+            proxy.callback.call(proxy.context, data.query.results.Video);
+            return;
+        }
+
+        // 多个视频的callback调用
+        for (i = 0, max = data.query.results.Video.length; i < max; i += 1) {
+            proxy.callback.call(proxy.context, data.query.results.Video[i]);
+        }
+    }
+};
+// 视频处理模块主要有3种子功能：获取信息、展示信息、播放视频：
+
+var videos = {
+    // 初始化播放器代码，开始播放
+    getPlayer: function (id) {
+        return '' +
+            '<object width="400" height="255" id="uvp_fop" allowFullScreen="true">' +
+            '<param name="movie" value="http://d.yimg.com/m/up/fop/embedflv/swf/fop.swf"\/>' +
+            '<param name="flashVars" value="id=v' + id + '&amp;eID=1301797&amp;lang=us&amp;enableFullScreen=0&amp;shareEnable=1"\/>' +
+            '<param name="wmode" value="transparent"\/>' +
+            '<embed ' +
+            'height="255" ' +
+            'width="400" ' +
+            'id="uvp_fop" ' +
+            'allowFullScreen="true" ' +
+            'src="http://d.yimg.com/m/up/fop/embedflv/swf/fop.swf" ' +
+            'type="application/x-shockwave-flash" ' +
+            'flashvars="id=v' + id + '&amp;eID=1301797&amp;lang=us&amp;ympsc=4195329&amp;enableFullScreen=1&amp;shareEnable=1"' +
+            '\/>' +
+            '<\/object>';
+                },
+    // 拼接信息显示内容，然后在append到li的底部里显示
+    updateList: function (data) {
+        var id,
+            html = '',
+            info;
+
+        if (data.query) {
+            data = data.query.results.Video;
+        }
+        id = data.id;
+        html += '<img src="' + data.Image[0].url + '" width="50" \/>';
+        html += '<h2>' + data.title + '<\/h2>';
+        html += '<p>' + data.copyrightYear + ', ' + data.label + '<\/p>';
+        if (data.Album) {
+            html += '<p>Album: ' + data.Album.Release.title + ', ' + data.Album.Release.releaseYear + '<br \/>';
+        }
+        html += '<p><a class="play" href="http://new.music.yahoo.com/videos/--' + id + '">&raquo; play<\/a><\/p>';
+        info = document.createElement('div');
+        info.id = "info" + id;
+        info.innerHTML = html;
+        $('v' + id).appendChild(info);
+    },
+    // 获取信息并显示
+    getInfo: function (id) {
+        var info = $('info' + id);
+
+        if (!info) {
+            proxy.makeRequest(id, videos.updateList, videos); //执行代理职责，并传入videos.updateList回调函数
+            return;
+        }
+
+        if (info.style.display === "none") {
+            info.style.display = '';
+        } else {
+            info.style.display = 'none';
+        }
+    }
+};
+// 现在可以处理点击事件的代码了，由于有很多a连接，如果每个连接都绑定事件的话，显然性能会有问题，所以我们将事件绑定在<ol>元素上，然后检测点击的是否是a连接，如果是说明我们点击的是视频地址，然后就可以播放了：
+
+$('vids').onclick = function (e) {
+    var src, id;
+
+    e = e || window.event;
+    src = e.target || e.srcElement;
+
+    // 不是连接的话就不继续处理了
+    if (src.nodeName.toUpperCase() !== "A") {
+        return;
+    }
+    //停止冒泡
+    if (typeof e.preventDefault === "function") {
+        e.preventDefault();
+    }
+    e.returnValue = false;
+
+    id = src.href.split('--')[1];
+
+    //如果点击的是已经生产的视频信息区域的连接play，就开始播放
+    // 然后return不继续了
+    if (src.className === "play") {
+        src.parentNode.innerHTML = videos.getPlayer(id);
+        return;
+    }
+        
+    src.parentNode.id = "v" + id;
+    videos.getInfo(id); // 这个才是第一次点击的时候显示视频信息的处理代码
+};
+// 全选反选的代码大同小异，我们就不解释了：
+
+$('toggle-all').onclick = function (e) {
+
+    var hrefs, i, max, id;
+
+    hrefs = $('vids').getElementsByTagName('a');
+    for (i = 0, max = hrefs.length; i < max; i += 1) {
+        // 忽略play连接
+        if (hrefs[i].className === "play") {
+            continue;
+        }
+        // 忽略没有选择的项
+        if (!hrefs[i].parentNode.firstChild.checked) {
+            continue;
+        }
+
+        id = hrefs[i].href.split('--')[1];
+        hrefs[i].parentNode.id = "v" + id;
+        videos.getInfo(id);
+    }
+};
+
+</script>
+</body>
+</html>

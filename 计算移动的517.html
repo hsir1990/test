@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	function num(args){
+
+		var arr = ['*','-','/','+'];
+		for(var i = 0; i<arr.length; i++){
+			var indexI = arr[i];
+			 arr.splice(i, 0);
+			 var arr1 = arr;
+				arr = ['*','-','/','+'];
+				//console.log(arr1)
+			for(var j=0; j<arr1.length; j++ ){
+				var arr11 = arr1;
+				var indexj = arr[j];
+				 arr11.splice(j, 0);
+				 var arr2 = arr11;
+
+				for(var k = 0; k<arr2.length; k++){
+					//console.log(arr,arr1,arr2)
+
+					if(eval(args[0] +indexI + args[1] + indexj + args[2]+ arr2[k] + args[3]) == 517){
+						console.log(indexI,indexj,arr2[k])
+				
+					}
+				}
+				
+			}
+			
+		}
+	}
+	num([50,10,45,28])
+</script>
+</body>
+</html>

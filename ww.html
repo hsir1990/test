@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+		<script type="text/javascript" src="./zepto.js"></script>
+		<script language="JavaScript"> 
+			window.addEventListener("popstate", function() {
+			    var currentState = history.state;
+			    /*
+			     * 该干嘛干嘛
+			    */	
+			    alert(123)										
+			})
+		</script> 
+		
+	<script type="text/javascript">
+	// 函数自执行
+		// var aa = function(){
+		// 	alert(11)
+		// }();
+
+
+		// var postJSON = function(){
+		// 	return $.ajax({
+		// 		type:'GET',
+		// 		url:'http://ap.7lk.me/patient/doctor/detail',
+		// 		data:{"dd":"dd"},
+		// 		dataType:'json',
+		// 		success: function(data){
+		// 			true&&callback&callback();//单写callback不报错，true改成false不执行callback
+		// 			// alert(22)
+		// 			console.log(data);//只要接口通就显示，不管code值返回多少
+		// 		},
+		// 		error:function(aa){
+		// 			console.log('zz',aa,'aa')//当你调不通的时候显示
+		// 		}
+		// 	});
+		// }
+		// function callback(){
+		// 	alert(1123)
+		// }
+		// postJSON();//调用此函数的时候能return返回$.ajax函数；
+
+		// // 修改Object.prototype
+		// Object.prototype.bar = 1; 
+		// var foo = {goo: undefined};
+		//  // console.log(foo.hasOwnProperty('bar'));// false
+		//  // console.log(foo.hasOwnProperty('goo'));// true
+		// foo.bar; // 1
+		// console.log(foo.bar);//1
+		// // console.log(foo.hasOwnProperty('bar'));// false
+		// // console.log(foo.hasOwnProperty('goo'));// true
+		// 'bar' in foo;//当“对象”为数组时，“变量”指的是数组的“索引”；当“对象”为对象是，“变量”指的是对象的“属性”。 
+		// console.log('bar' in foo); // true
+		// console.log(foo.bar); //1
+		// console.log(foo.goo); //undefined
+		// console.log(foo.hasOwnProperty('bar')); // false
+		// console.log(foo.hasOwnProperty('goo')); // true
+
+
+		// var obj = {
+		// 	go : function(){
+		// 		alert('go');
+		// 	},
+		// 	no : function(){
+		// 		alert('no');
+		// 	},
+		// 	know : function(){
+		// 		alert(this);
+		// 		this.no();//这个this代表obj
+		// 		console.log(this);
+		// 	}
+		// };		
+		// obj.know();
+
+ 	</script>
+<!--  	<script language="javascript" type="text/javascript">
+	function doSomething(callback) {
+		// … 
+		alert(111)
+		// Call the callback
+		callback('stuff', 'goes', 'here');
+	} 
+	function foo(a, b, c) {
+		// I'm the callback
+		alert(a + " 11 " + b + " 22 " + c);
+	} 
+	doSomething(foo); //  先弹111再弹a 11 b 22 c
+	</script> -->
+
+<!-- 	<script language="javascript" type="text/javascript">
+	 function dosomething(damsg, callback){
+	  alert(damsg);
+	  if(typeof callback == "function") 
+	  callback();
+	 } 
+	dosomething("回调函数", function(){
+	  alert("和 jQuery 的 callbacks 形式一样!");
+	 }); //先弹 回掉函数 后弹  和 jQuery 的 callbacks 形式一样!
+	</script> -->
+
+
+	<!-- <script language="javascript" type="text/javascript">
+	function Thing(name) {
+	this.name = name;
+	}
+	Thing.prototype.doSomething = function(callback) {
+	// Call our callback, but using our own instance as the context
+	alert(22)
+	console.log(this)//thing
+	callback.call(this);
+	console.log(this)//thing
+	}
+	  
+	function foo() {
+	alert(this.name);
+	}
+	  
+	var t = new Thing('Joe');//this.nam = "Joe";
+	t.doSomething(foo); // Alerts "Joe" via `foo`    先弹22再弹Joe
+	</script>  -->
+
+
+<!-- 	<script language="javascript" type="text/javascript"> 
+	function Thing(name) {
+	this.name = name;
+	}
+	Thing.prototype.doSomething = function(callback, salutation) {
+	// Call our callback, but using our own instance as the context
+	callback.call(this, salutation);
+	} 
+	function foo(salutation) {
+	alert(salutation + " " + this.name);
+	} 
+	var t = new Thing('Joe');
+	t.doSomething(foo, 'Hi'); // Alerts "Hi Joe" via `foo`
+	</script> -->
+	<!--js 判断当前的手机系统类型-->
+	<!--<script language="javascript">
+	window.onload = function () {
+	alert("1");
+	var u = navigator.userAgent;
+	console.log(navigator)
+	console.log(u)
+	console.log(typeof(u));
+	if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {//安卓手机
+	alert("安卓手机");
+	// window.location.href = "mobile/index.html";
+	} else if (u.indexOf('iPhone') > -1) {//苹果手机
+	// window.location.href = "mobile/index.html";
+	alert("苹果手机");
+	} else if (u.indexOf('Windows Phone') > -1) {//winphone手机
+	alert("winphone手机");
+	// window.location.href = "mobile/index.html";
+	}
+	}
+	</script>-->
+	<style type="text/css">
+		div{
+			height: 100px;
+			width: 200px;
+			border: 1px #f00 solid;
+			text-align: center;
+			word-wrap:break-word;
+			}
+	</style>
+</head>
+<body>
+	<div>jfk拉萨角度来看疯狂降价了考试各科老师的 上岛咖啡结果来看；就撒了；观看距离喀什就发过来看看撒就立刻感觉lk；的风格看到楼上的房间个</div>
+			<script language="JavaScript"> 
+			window.addEventListener('popstate', function(e){
+			  if (history.state){
+			    var state = e.state;
+			    //do something(state.url, state.title);
+			    alert(12321)
+			  }
+			}, false);
+		</script> 
+</body>
+</html>

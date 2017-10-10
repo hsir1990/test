@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        section{height: 300px;width: 300px;border: 1px solid #ccc;}
+        progress{width: 300px;}
+        .hover{color: red;}
+    </style>
+</head>
+<body>
+    <div>
+        <input id="btn" type="button" value="提交">
+        <section id="sec"><p id="des">拖到此处</p></section>
+        <progress id="prog" value="0" max="100"></progress>
+    </div>
+    <script>
+        // ondrag
+        // 在区域内开始拖动时执行js
+
+        var oBtn = document.getElementById('btn');
+        var oSec = document.getElementById('sec');
+        var oDes = document.getElementById('des');
+        var oProg = document.getElementById('prog');
+        // 拖拽效果
+        oSec.ondragover = function(event){
+            event.preventDefault();
+            this.className = 'hover';
+            return false;//一定要结束   要不还会直接打开图片
+        };
+        oSec.ondragend = function(event){
+            event.preventDefault();
+            this.className = '';
+            return false;//一定要结束   要不还会直接打开图片
+        };
+        //在可拖动元素放置在该区域时执行js代码
+        oSec.ondrop = function(event){
+            // 1阻止默认事件
+            event.preventDefault();
+            //2获取拖拽图片文件
+            var files = event.dataTransfer.files;
+            console.log(files[0])
+            // 6上传之前，再次整理代码，预览功能的函数封装
+            viewHolder(files)
+
+           
+        }
+        // 优化代码
+        function previewfile(file){
+            //h5中读取文件的对象
+            var reader = new FileReader();
+            //通过将图片数据读取成Data URL的方法，将图片展示出来
+            reader.readAsDataURL(file)
+            reader.onload = function(e){
+                oProg.value = oProg.innerHTML = 100;
+                var image = new Image()//打印为标签<img>
+                console.log(111,e.target)
+                image.src = e.target.result;
+                image.width = 250;
+                oSec.appendChild(image);
+            }
+        }
+
+        function viewHolder(files){
+            //5清空元素
+            while(oSec.hasChildNodes()){
+                oSec.removeChild(oSec.firstChild);
+            }
+            //3.多图片上传并预览
+            for(var i = 0; i < files.length; i++){
+                previewfile(files[i])
+            }
+        }
+        // function upload(){
+
+        // }
+        // // progress.value = progress.innerHTML = 100;
+        // function readfiles(files){
+        //     // 装货，表单拼接
+        //     for(avr i = 0; i < files.length; i++){
+        //         // FromData 对象就模拟一个原始的表单格式的数据
+        //         var forData = new FormData();
+        //         formData.append('file', files[i]);
+        //     }
+        // }
+    </script>
+</body>
+</html>

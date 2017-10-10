@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    // (4).以下是链式调用原理
+
+    //    var MyJQ = function(){
+    //    }
+    //     MyJQ.prototype = {
+    //         css:function(){
+    //            console.log("设置css样式");
+    //             return this;
+    //         },
+    //        show:function(){
+    //             console.log("将元素显示");
+    //            return this;
+    //         },
+    //        hide:function(){
+    //             console.log("将元素隐藏");
+    //        }
+    //    };
+    //     var myjq = new MyJQ();
+    //     myjq.css().css().show().hide();
+    alert(1)
+    var MyJQ = function(){};
+    MyJQ.prototype ={
+        css : function(){
+            console.log('写入css');
+            console.log(this)//谁调用他这个this就指向谁
+            return this;
+        },
+        show : function(){
+            console.log('写入show');
+            return this;
+        },
+        hide : function(){
+            console.log('写入hide');
+            return this;
+        }
+    }
+    var myJQ = new MyJQ();
+    myJQ.css().show().hide();
+    </script>
+</body>
+</html>             

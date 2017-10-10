@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>算法</title>
+</head>
+<body>
+<script> 
+//冒泡
+var arr = [2,25,8,5,28,9,11,17,19,16,13,17,5,23,7,27];
+ //错误的
+ // for(var i=0; i++; i<arr.length){
+ // 	for(var j=arr.length-i-1; j--; j>=0){
+ // 		if(arr[j] < arr[j-1]){
+ // 			var kkk;
+ // 			kkk = arr[j];
+ // 			arr[j] = arr[j-1];
+ // 			arr[j-1] = kkk;
+ // 			//return arr;
+ // 		};
+ // 		//return arr;
+ // 	}
+ // }
+ // console.log(arr)
+
+//正确的
+//   for(var i=0;  i<arr.length; i++){
+//  	for(var j=0; j<arr.length-i-1; j++){
+//  		if(arr[j] > arr[j+1]){
+//  			var kkk;
+//  			kkk = arr[j];
+//  			arr[j] = arr[j+1];
+//  			arr[j+1] = kkk;
+//  		};
+//  	}
+//  }
+// console.log(arr);
+
+
+//  function bubbleSort(arr) {
+//     var len = arr.length;
+//     for (var i = 0; i < len; i++) {
+//         for (var j = 0; j < len - 1 - i; j++) {
+//             if (arr[j] > arr[j+1]) {        //相邻元素两两对比
+//                 var temp = arr[j+1];        //元素交换
+//                 arr[j+1] = arr[j];
+//                 arr[j] = temp;
+//             }
+//         }
+//     }
+//     return arr;
+// }
+
+// console.log(bubbleSort(arr));
+
+
+// 选择排序
+
+// for(var i=0; i<arr.length; i++){
+// 	var minIndex = i;
+// 	for(var j=i; j<arr.length; j++){
+// 		if(arr[j] < arr[minIndex]){
+// 			minIndex = j;
+// 		}
+// 	}
+// 	var tmp = arr[i];
+// 	arr[i] = arr[minIndex];
+// 	arr[minIndex] = tmp;
+// }
+// console.log(arr);
+
+
+
+// for(var i=0; i<arr.length-1; i++){
+// 	var minIndex = i;
+// 	for(var j=i+1; j<arr.length; j++){
+// 		if(arr[j] < arr[minIndex]){
+// 			minIndex = j;
+// 		}
+// 	}
+// 	var tmp = arr[i];
+// 	arr[i] = arr[minIndex];
+// 	arr[minIndex] = tmp;
+// }
+// console.log(arr);
+
+// function selectionSort(arr) {
+//     var len = arr.length;
+//     var minIndex, temp;
+//     for (var i = 0; i < len - 1; i++) {
+//         minIndex = i;
+//         for (var j = i + 1; j < len; j++) {
+//             if (arr[j] < arr[minIndex]) {     //寻找最小的数
+//                 minIndex = j;                 //将最小数的索引保存
+//             }
+//         }
+//         temp = arr[i];
+//         arr[i] = arr[minIndex];
+//         arr[minIndex] = temp;
+//     }
+//     return arr;
+// }
+// console.log(selectionSort(arr))
+
+// 插入排序方法
+// var temp,varI;
+// for(var i=1; i<arr.length; i++){
+// 	temp = arr[i];
+// 	varI = i-1;
+// 	while(arr[varI+1] < arr[varI]){
+// 		arr[varI+1] = arr[varI];
+// 		varI--;
+// 	}
+// 	arr[varI] = temp;
+// }
+// console.log(arr)
+
+// var temp,varI;
+// for(var i=1; i<arr.length; i++){
+// 	temp = arr[i];
+// 	varI = i-1;
+// 	while(varI >= 0 && arr[varI] > temp){
+// 		arr[varI+1] = arr[varI];
+// 		varI--;
+// 	}
+// 	arr[varI+1] = temp;
+// }
+// console.log(arr)
+
+
+
+// function insertionSort(arr) {
+//     var len = arr.length;
+//     var preIndex, current;
+//     for (var i = 1; i < len; i++) {
+//         preIndex = i - 1;
+//         current = arr[i];
+//         while(preIndex >= 0 && arr[preIndex] > current) {
+//             arr[preIndex+1] = arr[preIndex];
+//             preIndex--;
+//         }
+//         arr[preIndex+1] = current;
+//     }
+//     return arr;
+// }
+// console.log(insertionSort(arr));
+
+
+// 希尔排序也称缩小增量排序
+// var len = arr.length,
+//     temp,
+//     gap = 1;
+// 	while(gap < len/3){
+// 		gap = gap*3+1;//9  7  //8   7   //7   7   //6   4
+// 	}    
+// for(gap; gap>0; gap = Math.floor(gap/3)){//7   2
+// 	for(var i = gap; i<len; i++){//7 8  //2 3 4 5 6 7 8
+// 		temp = arr[i];
+// 		for(var j = i-gap; j>=0 && arr[j]>temp; j=j-gap){//0   //1  
+// 			arr[j+gap] = arr[j];						//2 3//0     //4 5//0 2  //6 7//0 2 4  //8//0 2 4 6
+// 		}
+// 		arr[j+gap] = temp;
+// 	}
+// }
+// console.log(arr);
+// var len = arr.length,
+// temp,
+// gap = 1;
+
+// while(gap < len/3){
+// 	gap = gap * 3 + 1;
+// }
+// for(gap; gap>0; gap = Math.floor(gap/3)){
+// 	for(var i = gap; i<len; i++){
+// 		temp = arr[i];
+// 		for(var j = i-gap; j>=0 && arr[j]>temp; j-=gap){
+// 			arr[j+gap] = arr[j];
+// 		}
+// 		arr[j+gap] = temp;
+// 	}
+// }
+
+
+// console.log(arr)
+// function shellSort(arr) {
+//     var len = arr.length,
+//         temp,
+//         gap = 1;
+//     while(gap < len/3) {          //动态定义间隔序列
+//         gap =gap*3+1;
+//     }
+//     for (gap; gap > 0; gap = Math.floor(gap/3)) {
+//         for (var i = gap; i < len; i++) {
+//             temp = arr[i];
+//             for (var j = i-gap; j >= 0 && arr[j] > temp; j-=gap) {
+//                 arr[j+gap] = arr[j];
+//             }
+//             arr[j+gap] = temp;
+//         }
+//     }
+//     return arr;
+// }
+
+// console.log(shellSort(arr));
+
+// 归并算法
+// function merge(left, right){
+// 	var result = [];
+// 	while(left.length && right.length){
+// 		if(left[0] > right[0]){
+// 			result.push(right.shift());
+// 		}else{
+// 			result.push(left.shift());
+// 		}
+// 	};
+// 	while(left.length){
+// 		result.push(left.shift());
+// 	};
+// 	while(right.length){
+// 		result.push(right.shift());
+// 	};
+// 	return result;
+// }
+// function mergeSort(arr){
+// 	var len = arr.length;
+// 	if(len<2){
+// 		return arr;
+// 	}
+// 	var middle = Math.floor(len/2),
+// 		left = arr.slice(0, middle),
+// 		right = arr.slice(middle);
+// 	return merge(mergeSort(left), mergeSort(right));
+// }
+// document.write(mergeSort(arr));
+
+// function merge(left, right){
+// 	var result = [];
+// 	while(left.length && right.length){
+// 		if(left[0] > right[0]){
+// 			result.push(right.shift());
+// 		}else{
+// 			result.push(left.shift());
+// 		}
+
+// 	};
+// 	while(left.length)
+// 		result.push(left.shift());
+// 	while(right.length)
+// 		result.push(right.shift());
+// 	return result;
+// }
+// function mergeSort(arr){
+// 	var len = arr.length;
+// 	if(len < 2){
+// 		return arr;
+// 	}
+// 	var middle = Math.floor(len / 2),
+// 		left = arr.slice(0, middle),
+// 		right = arr.slice(middle);
+// 	return merge(mergeSort(left), mergeSort(right));
+// }
+// function mergeSort(arr) {  //采用自上而下的递归方法
+//     var len = arr.length;
+//     if(len < 2) {
+//         return arr;
+//     }
+//     var middle = Math.floor(len / 2),
+//         left = arr.slice(0, middle),
+//         right = arr.slice(middle);
+//     return merge(mergeSort(left), mergeSort(right));
+// }
+// document.write(mergeSort(arr));
+
+
+// function merge(left, right)
+// {
+//     var result = [];
+
+//     while (left.length && right.length) {
+//         if (left[0] <= right[0]) {
+//             result.push(left.shift());
+//         } else {
+//             result.push(right.shift());
+//         }
+//     }
+
+//     while (left.length)
+//         result.push(left.shift());
+
+//     while (right.length)
+//         result.push(right.shift());
+
+//     return result;
+// }
+// console.log(mergeSort(arr));
+
+
+
+// 快速排序
+// function quickSort(arr){
+//     //如果数组<=1,则直接返回
+//     if(arr.length<=1){return arr;}
+//     var pivotIndex=Math.floor(arr.length/2);
+//     //找基准，并把基准从原数组删除
+//     var pivot=arr.splice(pivotIndex,1)[0];
+//     //定义左右数组
+//     var left=[];
+//     var right=[];
+
+//     //比基准小的放在left，比基准大的放在right
+//     for(var i=0;i<arr.length;i++){
+//         if(arr[i]<=pivot){
+//             left.push(arr[i]);
+//         }
+//         else{
+//             right.push(arr[i]);
+//         }
+//     }
+//     //递归
+//     return quickSort(left).concat([pivot],quickSort(right));
+// }
+// console.log(quickSort(arr));
+
+
+// function quickSort(arr){
+// 	if(arr.length <= 1){return arr;}
+// 	var pivotIndex = Math.floor(arr.length/2);
+// 	var pivot = arr.splice(pivotIndex, 1)[0];
+// 	var left = [];
+// 	var right = [];
+
+// 	for(var i=0; i<arr.length; i++){
+// 		if(arr[i] <= pivot){
+// 			left.push(arr[i]);
+// 		}else{
+// 			right.push(arr[i]);
+// 		}
+// 	}
+// 	return quickSort(left).concat([pivot],quickSort(right));
+// }
+// document.write(quickSort(arr));
+
+
+
+
+
+
+
+
+// function quickSort(arr, left, right) {
+// 	var len = arr.length,
+// 		partitionIndex,
+// 		left = typeof left != 'number' ? 0 : left,
+// 		right = typeof right != 'number' ? len - 1 : right;
+
+// 	if(left < right){
+// 		partitionIndex = partition(arr, left, right);
+// 		quickSort(arr, left, partitionIndex - 1);
+// 		quickSort(arr, partitionIndex+1, right);
+// 	}
+// 	return arr;
+// }
+
+// function partition(arr, left, right){
+// 	var pivot = left,
+// 		index = pivot + 1;
+// 	for(var i = index; i <= right; i++){
+// 		if(arr[i] < arr[pivot]) {
+// 			swap(arr, i, index);
+// 			index++;
+// 		}
+// 	}
+// 	swap(arr, pivot, index - 1);
+// 	return index-1;
+// }
+// function swap(arr, i, j){
+// 	var temp = arr[i];
+// 	arr[i] = arr[j];
+//     arr[j] = temp;
+// }
+// document.write(quickSort(arr));
+
+// function quickSort(arr, left, right) {
+//     var len = arr.length,
+//         partitionIndex,
+//         left = typeof left != 'number' ? 0 : left,
+//         right = typeof right != 'number' ? len - 1 : right;
+
+//     if (left < right) {
+//         partitionIndex = partition(arr, left, right);
+//         quickSort(arr, left, partitionIndex-1);
+//         quickSort(arr, partitionIndex+1, right);
+//     }
+//     return arr;
+// }
+
+// function partition(arr, left ,right) {     //分区操作
+//     var pivot = left,                      //设定基准值（pivot）
+//         index = pivot + 1;
+//     for (var i = index; i <= right; i++) {
+//         if (arr[i] < arr[pivot]) {
+//             swap(arr, i, index);
+//             index++;
+//         }        
+//     }
+//     swap(arr, pivot, index - 1);
+//     return index-1;
+// }
+
+// function swap(arr, i, j) {
+//     var temp = arr[i];
+//     arr[i] = arr[j];
+//     arr[j] = temp;
+// }
+// document.write(quickSort(arr));
+
+// 堆排序
+// var len;    //因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
+
+// function buildMaxHeap(arr) {   //建立大顶堆
+//     len = arr.length;
+//     for (var i = Math.floor(len/2); i >= 0; i--) {
+//         heapify(arr, i);
+//     }
+// }
+
+// function heapify(arr, i) {     //堆调整
+//     var left = 2 * i + 1,
+//         right = 2 * i + 2,
+//         largest = i;
+
+//     if (left < len && arr[left] > arr[largest]) {
+//         largest = left;
+//     }
+
+//     if (right < len && arr[right] > arr[largest]) {
+//         largest = right;
+//     }
+
+//     if (largest != i) {
+//         swap(arr, i, largest);
+//         heapify(arr, largest);
+//     }
+// }
+
+// function swap(arr, i, j) {
+//     var temp = arr[i];
+//     arr[i] = arr[j];
+//     arr[j] = temp;
+// }
+
+// function heapSort(arr) {
+//     buildMaxHeap(arr);
+
+//     for (var i = arr.length-1; i > 0; i--) {
+//         swap(arr, 0, i);
+//         len--;
+//         heapify(arr, 0);
+//     }
+//     return arr;
+// }
+// document.write(heapSort(arr));
+
+
+// 计数排序
+// function countingSort(arr, maxValue) {
+//     var bucket = new Array(maxValue+1),
+//         sortedIndex = 0;
+//         arrLen = arr.length,
+//         bucketLen = maxValue + 1;
+
+//     for (var i = 0; i < arrLen; i++) {
+//         if (!bucket[arr[i]]) {
+//             bucket[arr[i]] = 0;
+//         }
+//         bucket[arr[i]]++;
+//     }
+
+//     for (var j = 0; j < bucketLen; j++) {
+//         while(bucket[j] > 0) {
+//             arr[sortedIndex++] = j;
+//             bucket[j]--;
+//         }
+//     }
+
+//     return arr;
+// }
+// document.write(countingSort(arr,50));
+
+// 桶排序
+function bucketSort(arr, bucketSize) {
+    if (arr.length === 0) {
+      return arr;
+    }
+
+    var i;
+    var minValue = arr[0];
+    var maxValue = arr[0];
+    for (i = 1; i < arr.length; i++) {
+      if (arr[i] < minValue) {
+          minValue = arr[i];                //输入数据的最小值
+      } else if (arr[i] > maxValue) {
+          maxValue = arr[i];                //输入数据的最大值
+      }
+    }
+
+    //桶的初始化
+    var DEFAULT_BUCKET_SIZE = 5;            //设置桶的默认数量为5
+    bucketSize = bucketSize || DEFAULT_BUCKET_SIZE;
+    var bucketCount = Math.floor((maxValue - minValue) / bucketSize) + 1;   
+    var buckets = new Array(bucketCount);
+    for (i = 0; i < buckets.length; i++) {
+        buckets[i] = [];
+    }
+
+    //利用映射函数将数据分配到各个桶中
+    for (i = 0; i < arr.length; i++) {
+        buckets[Math.floor((arr[i] - minValue) / bucketSize)].push(arr[i]);
+    }
+
+    arr.length = 0;
+    for (i = 0; i < buckets.length; i++) {
+        insertionSort(buckets[i]);                      //对每个桶进行排序，这里使用了插入排序
+        for (var j = 0; j < buckets[i].length; j++) {
+            arr.push(buckets[i][j]);                      
+        }
+    }
+
+    return arr;
+}
+// 基数排序
+//LSD Radix Sort
+// var counter = [];
+// function radixSort(arr, maxDigit) {
+//     var mod = 10;
+//     var dev = 1;
+//     for (var i = 0; i < maxDigit; i++, dev *= 10, mod *= 10) {
+//         for(var j = 0; j < arr.length; j++) {
+//             var bucket = parseInt((arr[j] % mod) / dev);
+//             if(counter[bucket]==null) {
+//                 counter[bucket] = [];
+//             }
+//             counter[bucket].push(arr[j]);
+//         }
+//         var pos = 0;
+//         for(var j = 0; j < counter.length; j++) {
+//             var value = null;
+//             if(counter[j]!=null) {
+//                 while ((value = counter[j].shift()) != null) {
+//                       arr[pos++] = value;
+//                 }
+//           }
+//         }
+//     }
+//     return arr;
+// }
+// document.write(radixSort(arr,2));
+</script>
+</body>
+</html>

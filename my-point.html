@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta charset="utf-8" />
+	<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta name="keywords" content="首页" />
+	<meta name="description" content="医药" />
+	<link rel="stylesheet" href="../assets/css/layer.min.css?v=20160614">
+	<link rel="stylesheet" href="../assets/css/reset.min.css?v=20160614">
+	<link rel="stylesheet" href="../assets/css/my-points.min.css?v=20160614">
+	<link rel="stylesheet" href="../assets/css/point-histroy.min.css?v=20160614">
+	<link rel="stylesheet" href="../assets/css/integral-detail.min.css?v=20160614">
+	<link rel="stylesheet" href="../assets/css/apply-record.min.css?v=20160614">
+	<title></title>
+</head>
+<body id="allpage" data-role="page">
+<!--加载动画-->
+<div id="loading" class="layermbox layermbox2 hide myPoints" index="0">
+	<div class="laymshade"></div>
+	<div class="layermmain">
+		<div class="section">
+			<div class="layermchild  layermanim">
+				<div class="layermcont"><i></i><i class="laymloadtwo"></i><i></i>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/html" id="my_point">
+	<section id="my_point_node" style="display: none" data-bind="attr: {'style': ''}">
+		<!--ko if:session().code!=0 -->
+		<div class="failed" data-bind="attr:{'class':'show'}">
+			<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+			<p class="failed-msg" data-bind="text:session().msg"></p>
+		</div>
+		<!--/ko-->
+		<!--ko if:session().code==0 -->
+		<!--ko if:session().data[0].length==0 -->
+		<div class="failed" data-bind="attr:{'class':'show'}">
+			<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+			<p class="failed-msg" data-bind="text:session().msg"></p>
+		</div>
+		<!--/ko-->
+		<!--ko if:session().data[0].length!=0 -->
+		<section class="points-news" >
+			<img src="../assets/image/drops.png" class ="display-block">
+			<p class="text-align-center mt75">可提现积分</p>
+			<p class="text-align-center"><strong data-bind="text:session().data[0].canMentionPoint"></strong></p>
+		</section>
+		<div data-bind="if:session().data[0].openApply!=0">
+			<section class="points-list" >
+				<p class="score-record"><a href="javascript:;">帐户总积分<span data-bind="text:session().data[0].totalPoint"></span><i></i></a></p>
+				<p class="apply-post"><a href="javascript:;">累计提现<span data-bind="text:session().data[0].grandMention"></span><i></i></a></p>
+			</section>
+			<section class="points-info">
+				<p>提示：积分达到2000及以上，且通过身份认证审核，
+					才可以申请提现</p>
+			</section>
+			<section class ="points-footer">
+				<button class="text-align-center">申请提现</button>
+			</section>
+		</div>
+		<div data-bind="if:session().data[0].openApply==0">
+			<section class="points-list" >
+				<p class="score-record"><a href="javascript:;">帐户总积分<span data-bind="text:session().data[0].totalPoint"></span><i></i></a></p>
+			</section>
+		</div>
+		<!--/ko-->
+		<!--/ko-->
+	</section>
+</script>
+<script type="text/html" id="point-histroy_tpl">
+	<section id="point-histroy_tpl_node" class="post-box" style="display: none" data-bind="attr: {'style': ''}">
+		<!--ko if:session().code!=0 -->
+		<div class="failed" data-bind="attr:{'class':'show'}">
+			<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+			<p class="failed-msg" data-bind="text:session().msg"></p>
+		</div>
+		<!--/ko-->
+		<!--ko if:session().code==0 -->
+		<!--ko if:session().data[0].result.length==0 -->
+		<section id="failed_null">
+			<div class="table">
+				<div class="table_cell">
+					<div class="failed" data-bind="attr:{'class':'show'}">
+						<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+						<p class="failed-msg">无历史记录</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ko-->
+		<!--ko if:session().data[0].result.length!=0 -->
+		<section data-bind="foreach: session().data[0].result">
+			<!--ko if:!_pointHistory(stage) -->
+			<span class="date" data-bind="text:stage"></span>
+			<!--/ko-->
+			<div class="point-history" data-bind="foreach:list" >
+				<div class="post" data-bind="attr: {'orderId': id,'data-type':type}">
+					<div class="point-box clearfix">
+						<span class="time" data-bind="text:createTime">05-17</span>
+						<div class="point">
+							<span class="num" data-bind="text:integralNum"></span>
+							<span class="state" data-bind="text:pointLog"></span>
+						</div>
+					</div>
+					<!--ko if:status==4||status==5-->
+					<div class="money gray-color detail" data-bind="text:remark"></div>
+					<!--/ko-->
+					<!--ko if:status!=4&&status!=5-->
+					<div class="money blue-color detail" data-bind="text:remark"></div>
+					<!--/ko-->
+					<!--ko if:type==4||type==6||type==10||type==12||type==13||type==14-->
+					<!--<img src="../assets/image/right-arrow.png" alt="" class="right-arrow">-->
+					<span class="right_arrow"></span>
+					<!--/ko-->
+				</div>
+			</div>
+		</section>
+		<!--/ko-->
+		<!--/ko-->
+	</section>
+</script>
+<script type="text/html" id="integral_details">
+	<div class=""></div>
+	<section id="integral_details_node" style="display: none" data-bind="attr: {'style': ''}">
+		<!--ko if:session().code!=0 -->
+		<div class="failed" data-bind="attr:{'class':'show'}">
+			<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+			<p class="failed-msg" data-bind="text:session().msg"></p>
+		</div>
+		<!--/ko-->
+		<!--ko if:session().code==0 -->
+
+		<!--ko if:session().data[0].type!=9 -->
+			<!--ko if:session().data[0][session().data[0].detailNode].prescription&&session().data[0][session().data[0].detailNode].skus.length==0&&session().data[0][session().data[0].detailNode].prescription[0].items.length==0 -->
+				<div class="failed" data-bind="attr:{'class':'show'}">
+					<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+					<p class="failed-msg" data-bind="text:session().msg"></p>
+				</div>
+			<!--/ko-->
+		<!--ko if:!session().data[0][session().data[0].detailNode].prescription||session().data[0][session().data[0].detailNode].skus.length!=0||session().data[0][session().data[0].detailNode].prescription[0].items.length!=0 -->
+		<header class="indetailTitle clearfix">
+			<div class="integral">
+				<!--ko if:session().data[0].type==4 || session().data[0].type==6 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>诊金积分</span>
+				</div>
+				<!--/ko-->
+				<!--ko if:session().data[0].type==10 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>诊金积分</span>
+				</div>
+				<!--/ko-->
+				<!--ko if:session().data[0].type==11 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>签到积分</span>
+				</div>
+				<!--/ko-->
+				<!--ko if:session().data[0].type==12 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>诊金积分</span>
+				</div>
+				<!--/ko-->
+				<!--ko if:session().data[0].type==13 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>咨询费积分</span>
+				</div>
+				<!--/ko-->
+				<!--ko if:session().data[0].type==14 -->
+				<div class="giveIntegral">
+					<b data-bind="text:session().data[0].point"></b>
+					<span>服务积分</span>
+				</div>
+				<!--/ko-->
+			</div>
+			<!--ko if:session().data[0].type==4 -->
+			<span class="rightSide">诊金</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==6 -->
+			<span class="rightSide">诊金</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==10 -->
+			<span class="rightSide">诊金</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==11 -->
+			<span class="rightSide">签到积分</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==12 -->
+			<span class="rightSide">随访服务费</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==13 -->
+			<span class="rightSide">图文咨询费</span>
+			<!--/ko-->
+			<!--ko if:session().data[0].type==14 -->
+			<span class="rightSide">个性化服务费</span>
+			<!--/ko-->
+
+			<!--<div class="deposit" data-bind="text:session().data[0][session().data[0].detailNode].remark"></div>-->
+			<div class="deposit" data-bind="text:session().data[0].statusDesc"></div>
+		</header>
+		<section class="integralDetail" id="integral_details_tpl_node">
+			<ul class="transaction">
+				<!--ko if: session().data[0][session().data[0].detailNode].createdAt-->
+				<li>
+					<div class="transRigth" data-bind="text:session().data[0][session().data[0].detailNode].createdAt"></div>
+					<span class="transTit">发生时间</span>
+				</li>
+				<!-- /ko -->
+				<!--ko if: session().data[0][session().data[0].detailNode].visitTime-->
+				<li>
+					<div class="transRigth" data-bind="text:session().data[0][session().data[0].detailNode].visitTime"></div>
+					<span class="transTit">发生时间</span>
+				</li>
+				<!-- /ko -->
+				<!--ko if: session().data[0].type==4-->
+				<li data-bind="if:session().data[0].type==4">
+					<div class="transRigth">诊金</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==6-->
+				<li data-bind="if:session().data[0].type==6">
+					<div class="transRigth">患者申请服务</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==10-->
+				<li data-bind="if:session().data[0].type==10">
+					<div class="transRigth" data-bind="text:session().data[0][session().data[0].detailNode].visitNumber"></div>
+					<span class="transTit">诊金编号 </span>
+				</li>
+				<li data-bind="if:session().data[0].type==10">
+					<div class="transRigth">诊金</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==11-->
+				<li data-bind="if:session().data[0].type==11">
+					<div class="transRigth">签到积分</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==12-->
+				<li data-bind="if:session().data[0].type==12">
+					<div class="transRigth" data-bind="text:session().data[0][session().data[0].detailNode].visitNumber"></div>
+					<span class="transTit">诊金编号</span>
+				</li>
+				<li data-bind="if:session().data[0].type==12">
+					<div class="transRigth">随访服务费</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==13-->
+				<li data-bind="if:session().data[0].type==13">
+					<div class="transRigth">图文咨询费</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<!--ko if: session().data[0].type==14-->
+				<li data-bind="if:session().data[0].type==14">
+					<div class="transRigth">个性化服务费</div>
+					<span class="transTit">积分来源</span>
+				</li>
+				<!--/ko-->
+				<li>
+					<div class="transRigth" data-bind="text:session().data[0][session().data[0].detailNode].remarkName&&session().data[0][session().data[0].detailNode].remarkName!=''?session().data[0][session().data[0].detailNode].remarkName:session().data[0][session().data[0].detailNode].patientName"></div>
+					<span class="transTit">患者姓名</span>
+				</li>
+			</ul>
+			<!--ko if:session().data[0].type==14 -->
+				<div class="serve">
+					<div class="infomation infomation_b">
+						<div class="top">
+							<span class="top_left">服务项：<i class="arrow"></i></span>
+						</div>
+					</div>
+					<ul class="drug_detail">
+						<li class="drug_datail_li"><span class="li_left">名 &nbsp;&nbsp;称：</span><span class="li_right" data-bind="text:session().data[0][session().data[0].detailNode].productName"></span></li>
+						<li class="drug_datail_li"><span class="li_left">价 &nbsp;&nbsp;格：</span><span class="li_right" data-bind="text:session().data[0][session().data[0].detailNode].amount+'&nbsp;元'"></span></li>
+					</ul>
+				</div>
+		
+			<!--/ko-->
+
+			<!--ko if:session().data[0].type==4 || session().data[0].type==6 -->
+				<!--ko foreach:{data:session().data[0][session().data[0].detailNode].prescription, as:'result'}-->
+					<div class="serve">
+						<div class="infomation">
+							<div class="top">
+								<span class="top_left">姓名：<span class="patientName"></span></span>
+								<span class="top_right">性别：<span class="sex"></span></span>
+							</div>
+							<div class="bottom">
+								<span class="bottom_left">临床诊断：<span data-bind="text:result.diagnosis"></span></span>
+							</div>
+						</div>
+						<div class="Rp">Rp</div>
+						<ul class="drug_detail">
+							<!--ko foreach:{data:result.items,as:'detail'}-->
+							<li class="drug_datail_li_a">
+								<div class="drug_detail_top">
+									<div class="drug_name" data-bind="text:detail.name"></div>
+									<div class="drug_sale">
+										<span>￥<span data-bind="text:detail.salePrice"></span></span>
+									</div>
+								</div>
+								<div class="drug_detail_bottom">
+									<div class="drug_eatway">
+										<span data-bind="if:detail.usages">用法：<span data-bind="text:detail.usages+(detail.bakup?(','+detail.bakup):'')"></span></span>
+									</div>
+									<div class="drug_num">
+										<span>×<span data-bind="text:detail.quantity"></span></span>
+									</div>
+								</div>
+							</li>
+							<!--/ko-->
+						</ul>
+					</div>
+				<!--/ko-->
+			<!--/ko-->
+			<section>
+				<header>收入核算详情</header>
+				<section>
+					<div><p>安生片</p><p>X2</p></div>
+					<div>
+						<p><i>(10</i><br/><i>商品积分</i></p>
+						<p>+</p>
+						<p><i>10)</i><br/><i>市场积分</i></p>
+						<p>X</p>
+						<p><i>2</i><br/><i>销售量</i></p>
+						<p>=</p>
+						<p><i>2</i><br/><i>总积分</i></p>
+					</div>
+				</section>
+			</section>
+			<div class="explain">
+				<p>说明：</p>
+				<br />
+				<p>1、积分来源：“七乐康医生”用户通过服务患者、患者打赏、签到等获得积分奖励；</p>
+				<p>2、通过不正当手段获取积分，查实后，将对该违规积分清零；</p>
+				<p>3、积分最终解释权归“七乐康所有”；</p>
+				<!--ko if: session().data[0].type==10 || session().data[0].type==12 -->
+				<div class="handLuck">
+					<span class="handLuck_t">想赚更多积分，试试签到手气^^ &nbsp; >></span>
+				</div>
+				<!--/ko-->
+			</div>
+		</section>
+		<!--/ko-->
+		<!--/ko-->
+		<!--ko if:session().data[0].type==9  -->
+		<header class="indetailTitle clearfix">
+			<span class="leftSide" data-bind="text:('+'+session().data[0].point)"></span>
+			<!--ko if: session().data[0].type == 9-->
+			<span class="rightSide">视频咨询</span>
+			<!--/ko-->
+			<!--ko if: session().data[0].type == 10-->
+			<span class="rightSide">疗效随访</span>
+			<!--/ko-->
+			<div class="deposit black" data-bind="text:_status(session().data[0].status)"></div>
+		</header>
+		<ul id="contrast">
+			<li>
+				<p class="p_left" data-bind="text: _type(session().data[0].type)"></p>
+				<!--ko if: session().data[0].type == 9-->
+				<p class="p_right" data-bind="text: session().data[0][session().data[0].detailNode].videoTime"></p>
+				<!--/ko-->
+				<!--ko if: session().data[0].type == 10 || session().data[0].type == 12 -->
+				<p class="p_right" data-bind="text: session().data[0][session().data[0].detailNode].visitTime"></p>
+				<!--/ko-->
+			</li>
+			<li>
+				<p class="p_left" data-bind="text: _number(session().data[0].type)"></p>
+				<!--ko if: session().data[0].type == 9-->
+				<p class="p_right" data-bind="text: session().data[0][session().data[0].detailNode].videoDuration / 1000 +'分钟'"></p>
+				<!--/ko-->
+				<!--ko if: session().data[0].type == 10-->
+				<p class="p_right" data-bind="text: session().data[0][session().data[0].detailNode].visitNumber"></p>
+				<!--/ko-->
+			</li>
+			<!--ko if: session().data[0].type == 9-->
+			<li><p class="p_left">支付金额</p><p class="p_right" data-bind="text: '¥&nbsp;'+session().data[0][session().data[0].detailNode].payment / 100 + '元'"></p></li>
+			<!--/ko-->
+			<li><p class="p_left">患者姓名</p><p class="p_right" data-bind="text: session().data[0][session().data[0].detailNode].patientName"></p></li>
+		</ul>
+		<!--/ko-->
+		<!--/ko-->
+	</section>
+</script>
+<script type="text/html" id="apply-record_tpl">
+	<section class="apply-record-box" id="apply-record_tpl_node" style="display: none" data-bind="attr: {'style': ''}">
+		<!--ko if:session().code!=0 -->
+		<div class="failed" data-bind="attr:{'class':'show'}">
+			<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+			<p class="failed-msg" data-bind="text:session().msg"></p>
+		</div>
+		<!--/ko-->
+		<!--ko if:session().code==0 -->
+		<!--ko if:session().data[0].result.length==0 -->
+		<section class="table_box">
+			<div class="table">
+				<div class="table_cell">
+					<div class="failed" data-bind="attr:{'class':'show'}">
+						<img src="../assets/image/js_d_icon_no_data_new.png" alt="" class="failed-img">
+						<p class="failed-msg">无提现记录</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/ko-->
+		<!--ko if:session().data[0].result.length!=0 -->
+		<section class="record-list" data-bind="foreach: session().data[0].result">
+			<!--ko if:!_pointHistory(stage) -->
+			<p class="record-data" data-bind="text:stage"></p>
+			<!--/ko-->
+			<section class="record-box" data-bind="foreach:list">
+				<section class="record-bo">
+					<p class="clearfix">
+						<em class="record-card" data-bind="text:bankName"></em>
+						<span class="record-money" data-bind="text:('¥'+(extraMoney/100))"></span>
+					</p>
+					<p class="clearfix">
+						<em class="fl small-fz" data-bind="text:applyTime"></em>
+						<span class="fr color-ff6600 small-fz" data-bind="style: { color: color},text:reason"></span>
+					</p>
+				</section>
+			</section>
+		</section>
+		<!--/ko-->
+		<!--/ko-->
+	</section>
+</script>
+<script src="../assets/js/util/require.min.js" data-main="../assets/js/main/point.min.js"></script>
+</body></html>

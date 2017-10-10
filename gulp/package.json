@@ -1,0 +1,25 @@
+{
+  "name": "hansong",
+  "version": "1.1.1",
+  "description": "撒��是是是",
+  "main": "阿斯顿发生",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1"
+  },
+  "devDependencies": {
+    "express": "^4.15.2"
+  },
+  "scripts": {
+    "test": "阿斯顿发"
+  },
+  "repository": {
+    "type": "git",
+    "url": "阿斯1234"
+  },
+  "keywords": [
+    "123"
+  ],
+  "author": "12",
+  "license": "ISC"
+}

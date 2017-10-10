@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>clone</title>
+	<script type="text/javascript" src="./zepto.js"></script>
+</head>
+<body>
+	<div class="aaa" style="margin-top: 90px;"><p>111111111</p></div>
+	<script type="text/javascript"> 
+		$("body").append($(".aaa").clone());
+		$('.aaa').click(function(){
+			alert(1)
+		});
+		//$("body").append($(".aaa").clone());//放后面会失效，点击不会有效
+		//$('.aaa').clone();
+		
+	</script>
+
+</body>
+</html>

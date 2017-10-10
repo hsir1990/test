@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meat chartset = "utf-8">
+	<title>页面1</title>
+	<script type="text/javascript" src = "zepto.js"></script>
+</head>
+<body>
+	<h1><a href="2.html">第一个页面</a></h1>
+	<script type="text/javascript"> 
+		window.onload  = function(){
+			// var paramsString = 'dsaf?q=URLUtils.searchParams&topic=api';
+
+			// var searchParams = new URLSearchParams(paramsString);
+			// alert(searchParams)
+
+			// history.pushState({"page":"yi"},'title:一页','?page=1');
+			// var hi = document.querySelector('h1');
+			// hi.onclick = function(){
+			// 	console.log( history.state)
+			// 	history.pushState({"page":"er"},'title:2页','?page=2');
+			// 	console.log( history.state)
+			// };
+			// window.onpopstate = function (event) {
+			// 	alert(22)
+			//   console.log('location: ' + document.location);
+
+			//   console.log('state: ' + JSON.stringify(event.state));
+			//   console.log( history.state)
+
+			// };
+		}
+	
+	</script>
+	<script type="text/javascript">
+	if (window.history && window.history.pushState) {
+
+    $(window).on('popstate', function() {
+      var hashLocation = location.hash;
+      var hashSplit = hashLocation.split("#!/");
+      debugger;
+      var hashName = hashSplit[1];
+
+      if (hashName !== '') {
+        var hash = window.location.hash;
+        if (hash === '') {
+          alert('後退按鈕點擊');
+        }
+      }
+    });
+
+    window.history.pushState('forward', null, '?#forward');//./#forward中最前面的点能省略前面的html
+
+  }
+
+
+
+	</script>
+</body>
+</html>

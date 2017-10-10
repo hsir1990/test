@@ -1,0 +1,55 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>canvas</title>
+		<style type="text/css">
+		#van{height:500px;width:500px; border: 1px solid #f00; background-color:#ccc;}
+		#img1{height:150px; width:150px; position:absolute;}
+		</style>
+	</head>
+	<body>
+		<canvas id="van"></canvas>
+		<img id="img1"  src="./body.jpg"/>
+		<script>
+			var oVan = document.getElementById('van');
+			var oImg1 = document.getElementById('img1');
+			//var ctx= oVan.getContext('2d');
+			//ctx.fillStyle = '#ffff00';
+			//ctx.fillRect(7,10,50,70);//矩形
+			
+			//var ctx = oVan.getContext('2d');
+			//ctx.moveTo(3,7);
+			//ctx.lineTo(199,200);
+			//ctx.stroke();
+			
+			//var can = oVan.getContext('2d');
+			//can.beginPath();
+			//can.arc(15,30,12,0,56);//椭圆
+			//can.arc(15,35,50,23,2*Math.PI);//圆线
+			//can.arc(15,12,5,0,2*Math.PI);//圆
+			//can.stroke();
+			
+			//var can = oVan.getContext('2d');
+			//can.font = '30px 黑体';
+			//can.fillText('HELLE',15,38);//中文的话 会发生转义
+			
+			//var can = oVan.getContext('2d');
+			//创建渐变
+			//var grd = can.createLinearGradient(0,0,200,0);//createLinearGradient();
+			//grd.addColorStop(0,'red');
+			//grd.addColorStop(1,'white');
+			//填充渐变
+			//can.fillStyle = grd;
+			//can.fillRect(10,10,150,80);
+			
+			 
+			 
+			var can = oVan.getContext('2d');
+			oImg1.onload=function(){//只有加载的时候才能加载出图片来
+				can.drawImage(oImg1,1,1);
+			}
+			
+			
+		</script>	
+	</body>
+</html>
