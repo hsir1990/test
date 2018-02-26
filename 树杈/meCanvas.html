@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>meCanvas</title>
+    <link type="text/css" rel="stylesheet" href="./meCanvas.css" />
+</head>
+<body>
+    <canvas id="ocan">
+        此版本浏览器不止canvas标签
+    </canvas>
+    <script type="text/javascript" src="./jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+    (function () {
+        var oCan = document.getElementById('ocan');
+        var oContext = oCan.getContext('2d');
+        // 设置起点和终点
+        oContext.moveTo(0, 0);
+        oContext.lineTo(200, 200);
+        // 设置样式
+        oContext.lineWidth = 2;
+        oContext.strokeStyle = '#ff0'
+        // 绘制
+        oContext.stroke();
+    })();
+    </script>
+</body>
+</html>

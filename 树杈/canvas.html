@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="gb2312" />
+        <title></title>
+        <style>
+            .point {
+                position:absolute;
+                width:1px; height:1px; overflow:hidden;
+                background:#000;
+            }
+            .col {
+                position:absolute; left:300px; top:100px;
+                font-size:20px; font-weight:bold; text-align:center;
+            }
+            .right {
+                left:500px;
+            }
+            p {
+                width:20px;
+                border:1px solid red;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="col">
+            <p>a</p>
+            <p>c</p>
+            <p>b</p>
+        </div>
+        <div class="col right">
+            <p>B</p>
+            <p>A</p>
+            <p>C</p>
+        </div>        
+        <script>
+            var x = [];
+            var y = [];
+            document.onclick = function(e){    
+                e = window.event || e;
+                var tx = e.clientX;
+                var ty = e.clientY;
+                x.push(tx);
+                y.push(ty);
+                //console.log( x );
+                //console.log( y );                
+                if( x.length == 2 && y.length == 2 ){
+                    createLine(x[0], y[0], x[1], y[1]);
+                    x.length = 0;
+                    y.length = 0;
+                }            
+            }
+            function point(x, y){
+                var div = document.createElement('div');
+                div.style.left = x + 'px';
+                div.style.top = y + 'px';
+                div.className = 'point';
+                document.body.appendChild(div);
+            }
+                         
+            function createLine(x1,y1,x2,y2){
+                var tmp, x, y;
+                if(x1 >= x2){
+                    tmp = x1;
+                    x1 = x2;
+                    x2 = tmp;
+                    tmp = y1;
+                    y1 = y2;
+                    y2 = tmp;        
+                }
+                for(var i = x1 ; i < x2; i++){
+                    x = i;
+                    y = (y2 - y1)/(x2 - x1)*(x - x1)+y1;
+                    point(x,y);
+                }
+            }     
+        </script>
+    </body>
+</html>

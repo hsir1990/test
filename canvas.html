@@ -1,0 +1,206 @@
+
+<html>
+<head>
+    <title>Canvas示例</title>
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            google.load("jquery","1.3.2");
+            google.setOnLoadCallback(function() { $(document).ready(pageLoad); });
+
+            var canvas;
+            var canvasCtx;
+            var imgSpirit;
+            var currentX;
+            var currentY;
+            var targetX;
+            var targetY;
+            var difX;
+            var difY;
+            var oTimer;
+            var facing = 4;
+            var isRunning = false;
+            var pathX = [];
+            var pathY = [];
+            function pageLoad() {
+                //canvas = $("#canvas");
+                // 获取canvas的ID
+                canvas = document.getElementById('canvas');
+                // 定义一个Image()对象
+                imgSpirit = new Image();
+                imgSpirit.onload = function() {
+                    // 用于在画布上的一个环境
+                    if (canvas.getContext) {
+                        canvasCtx = canvas.getContext('2d');
+                        currentX = 100;
+                        currentY = 250;
+                        draw(0);
+                    }
+                }
+                imgSpirit.src = "spirit.png";
+                $("#canvas").mousedown(onStart);
+                $("#canvas").mouseup(onStop);
+                $("#canvas").mousemove(onMove);
+                $("#canvas").css("cursor", "pointer");
+            }
+
+
+            function onStart(event) {
+                if (event.button == 0) {
+                    targetX = event.pageX;
+                    targetY = event.pageY;
+                    isRunning = true;
+                    onRunning();
+                    
+                }
+            }
+
+            function onStop() {
+                isRunning = false;
+                clearInterval(oTimer);
+            }
+
+            function onMove(event) {
+                if (isRunning) {
+                    difX = event.pageX - targetX;
+                    difY = event.pageY - targetY;
+                    setFacing();
+                    pathX.push(difX);
+                    pathY.push(difY);
+                    targetX = event.pageX;
+                    targetY = event.pageY;
+                    
+                  
+                }
+            }
+
+            function onRunning() {
+                var i = 0;
+                oTimer = setInterval(function() {
+                    i = i % 8;
+                    setNext();
+                    draw(i);
+                    i++;
+                }, 84);
+                
+            }
+
+
+
+            function setFacing() {
+               var  y = -(targetY -(currentY +128+60))
+               var x = targetX - (currentX + 128);
+               var v=y/x;
+               var t = Math.atan(v);
+               var r = Math.PI / 8;
+
+
+
+               if (y > 0 && x > 0) {
+                   if (t >= 0 && t <= r) {
+                       facing = 4;
+                   }
+                   if (t > r && t < 3 * r) {
+                       facing = 3;
+                   }
+                   if (t > 3 * r) { 
+                        facing =2
+                    }
+
+                }
+
+                if (y > 0 && x < 0) {
+                    if ((-t) > 3 * r) {
+                        facing = 2;
+                    }
+                    if (-t > r && -t < 3 * r) {
+                        facing = 1;
+                    }
+                    if (-t >= 0 && -t <= r) {
+                        facing = 0;
+                    }
+                }
+
+
+                if (y < 0 && x < 0) {
+                    if (t >= 0 && t <= r) {
+                        facing = 0;
+                    }
+                    if (t > r && t < 3 * r) {
+                        facing = 7;
+                    }
+                    if (t > 3 * r) {
+                        facing = 6
+                    }
+                }
+
+
+                if (y < 0 && x > 0) {
+                    if ((-t) > 3 * r) {
+                        facing = 6;
+                    }
+                    if (-t > r && -t < 3 * r) {
+                        facing = 5;
+                    }
+                    if (-t >= 0 && -t <= r) {
+                        facing = 4;
+                    }
+                }
+            }
+            
+            function draw(frame) {
+               
+                if ((currentX +256) >= 1500) {
+                    currentX = 1500 - 256;
+                }
+                if (currentX <= 0) {
+                    currentX = 0;
+                }
+
+                if (currentY <= 0) {
+                    currentY = 0;
+                }
+                if ((currentY + 256) >= 800) {
+                    currentY = 800 - 256;
+                }
+                
+               
+                canvasCtx.clearRect(currentX, currentY, 256, 256);
+                canvasCtx.drawImage(imgSpirit, frame * 256, facing * 256, 256, 256, currentX, currentY, 256, 256);
+                
+            }
+
+            function setNext() {
+                if ((currentX + 128) > targetX) {
+                    if (((currentX + 128) - targetX) > 8) {
+                        currentX = currentX - 8;
+                    }
+                }
+                if (currentX < targetX) { 
+                    if (targetX -currentX ) {
+                        currentX = currentX + 8;
+                    }
+                }
+
+
+
+                if ((currentY + 128 + 60) > targetY) {
+                    if (((currentY + 128 + 60) - targetY) > 8) {
+                        currentY = currentY - 6;
+                    }
+
+                }
+                if ((currentY + 128 + 60) < targetY) {
+                    if ((targetY - (currentY + 128 + 60)) > 8) {
+                        currentY = currentY + 6;
+                    }
+                }
+            }
+           
+        </script>
+</head>
+<body style="width:100%  ; height:100%">
+    <canvas id="canvas"  width="1500" height="800">
+    </canvas>
+
+</body>
+</html>

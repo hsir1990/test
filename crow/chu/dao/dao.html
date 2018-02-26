@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript" src="./zepto.js"></script>
+    <script type="text/javascript">
+    (function () {
+        // 保持ajax句柄 防止重复发请求，以及跳转页面之后中断请求，[待实现功能]
+        var ajaxObj = {key : '', value : {}};
+        // 添加sdk的方法
+        var sdkUtil = {};
+        sdkUtil.sdkapi_sign = function () {
+            var configParams = {
+                "source_order" : "E18012615355251817",
+                "ofc_order" : null
+            };
+
+        }
+        sdkUtil.getPublicParams = function () {
+            var params = {};
+            params._o = 0;
+        }
+        // 添加全局的util
+        var Util = {
+            "locationWrapper" : {
+                "daoApiCode" : function (d) {
+                    if (d.code == 1) {
+                        console.log('成功的code值：' + d.code);
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+        // 封装post方法 by hsir
+        var postJson = function (config, params, callback) {
+            // 参数叠加
+            var data = $.extend(sdkUtil.sdkapi_sign(), params);
+            console.log('befare ajax');
+            return $.ajax({
+                        url : config.viewModel,
+                        type : 'POST',
+                        headers : sdkUtil.getPublicParams(),
+                        timeout : 20000,
+                        data : data,
+                        success : function (json) {
+
+                            // 删除xhr对象
+                            deleteAjax(config);
+
+                            if (json == null) {
+                                console.log('数据为空');
+                                return;
+                            }
+                            // 判断code值用的
+                            var isOk = Util.locationWrapper.daoApiCode(json);
+
+                            isOk && callback && callback(json);
+
+                            console.log('post请求数据不为空');
+                        },
+                        error : function (e) {
+                            if (window.location.hash != '' && window.location.hash == config.pageId) {
+                                callback && callback({'msg' : '网络错误或超时', 'code' : 1}) 
+                            }
+
+                            console.log('网络错误或超时');
+                        },
+                        // 被请求后得到的数据类型
+                        dataType : "json"
+
+                    })
+            console.log('after ajax');
+        }
+
+        // 封装get方法 by hsir
+        var getJson = function (config, params, callback) {
+            return $.getJSON(config.viewModel,
+                            $.extend({"output" : "json"}, params),
+                            function (json) {
+                                deleteAjax(config);
+                                if (json == null) {
+                                    return;
+                                }
+                                callback && callback(json)
+                            });
+        }
+
+        // 封装jsonp方法  by hsir
+        var getJSONP = function(){
+            return $.ajax({
+                url : config.viewModel,
+                type : "GET",
+                timeout : 80000,
+                data : $.extend(params, sdkUtil.sdkapi_sign(), sdkUtil.getPublicParams()),
+                success : function(json){
+                    deleteAjax(config);
+                    if(json == null) {
+                        return;
+                    }
+                    callback && callback(json);
+                },
+                error : function (e) {
+                    if(window.location.hash != '' && window.location.hash == config.pageId) {
+                        callback && callback(json);
+                    }
+                    console.log('网络错误或超时', callback);
+                },
+                dataType : "jsonp"
+            })
+        }
+
+        // 执行完ajax 删除对象
+        var deleteAjax = function (config) {
+
+            if (config.pageId && config.pageId != '') {
+                delete ajaxObj.value[config.areaId];
+            }
+        }
+
+        var config = {
+            pageId : "searchFinish",
+            viewModel : "http://apiofc.osstest.7lk.cn/order_api/order/order_tracking/",
+            areaId : ""
+        }
+        var params = {};
+        // 管理ajax 结束掉上页面未完成的请求
+        var manageAjax = function (config, xhr) {
+            if (ajaxObj.key == config.pageId || ajaxObj.key == '') {
+                ajaxObj.key = config.pageId;
+                ajaxObj.value[config.areaId] = xhr;
+            } else {
+                for (key in ajaxObj.value) {
+                    ajaxObj.value[key].abort();
+                }
+            }
+        }
+        // jsonp请求
+        var ajax = function (config, params, callback) {
+            var xhr = postJson(config, params, callback);
+            console.log('xhr:' + xhr)
+            manageAjax(config, xhr);
+            return xhr;
+        }
+        ajax(config, params, function (data) {
+            console.log(data)
+        })
+    })();
+
+    </script>
+</body>
+</html>
