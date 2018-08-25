@@ -29,13 +29,13 @@
     </body>
     <script>
     window.onload = function(){
-    var text = document.getElementById("overflowhidden");
-    var str = text.innerHTML; 
-    window.onresize = function(){
+        var text = document.getElementById("overflowhidden");
+        var str = text.innerHTML; 
+        window.onresize = function(){
+            overflowhidden("overflowhidden",3,str);
+        }
         overflowhidden("overflowhidden",3,str);
     }
-    overflowhidden("overflowhidden",3,str);
-}
 
 // var overflowhidden = function(id, rows, str){
 //     var text = document.getElementById(id);

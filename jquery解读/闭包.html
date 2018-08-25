@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闭包</title>
+</head>
+<body>
+    <script>
+        // // 参数
+        // //参数相同
+        // function keith(a){
+        // return a+a;
+        // }
+        // console.log(keith(3)); //6
+        // // 省略参数
+        // function keith(a, b, c) {
+        // return a;
+        // }
+        // console.log(keith(1, 2, 3)); //1
+        // console.log(keith(1)); //1
+        // console.log(keith()); // 'undefined'
+        // function keith(a, b) {
+        // return a;
+        // }
+        // console.log(keith(, 1)); //SyntaxError: expected expression, got ','
+        // console.log(keith(undefined, 2)); //'undefined'
+        // // 默认值
+        // function keith(a, b) {
+        // (typeof b !== 'undefined') ? b = b: b = 1;
+        // return a * b;
+        // }
+        // console.log(keith(15)); //15
+        // console.log(keith(15, 2)) //30
+        // // 从ECMAScript 6开始，定义了默认参数(default parameters)。使用默认参数，在函数体的检查就不再需要了。
+        // function keith(a, b = 1) {
+        // return a * b;
+        // }
+        // console.log(keith(15)); //15
+        // console.log(keith(15, 2)) //30
+        // // 参数传递方式
+        // // 一个是传值传递
+        // var a = 1;
+        // function keith(num) {
+        // num = 5;
+        // }
+        // keith(a);
+        // console.log(a); //1
+        // // 一个是传址传递
+        // var arr = [2, 5];
+        // function keith(Arr) {
+        // Arr[0] = 3;
+        // }
+        // keith(arr);
+        // console.log(arr[0]); //3
+
+        // var arr = [2, 3, 5];
+        // // 如果函数内部修改的，不是参数对象的某个属性，而是替换掉整个参数，这时不会影响到原始值。
+        // function keith(Arr) {
+        // Arr = [1, 2, 3];
+        // }
+        // keith(arr);
+        // console.log(arr); // [2,3,5]
+        // // 同名参数
+        // function keith(a, a) {
+        // return a;
+        // }
+        // console.log(keith(1, 3)); //3
+        // console.log(keith(1)); //undefined
+
+        // function keith(a, a) {
+        // return arguments[0];
+        // }
+        // console.log(keith(2));　　//2
+        // //  arguments对象
+        // function keith(a, b, c) {
+        // console.log(arguments[0]); //1
+        // console.log(arguments[2]); //3
+        // console.log(arguments.length); //4
+        // }
+        // keith(1, 2, 3, 4);
+        // // arguments对象与数组的关系
+        // // arguments 对象不是一个数组（Array）。 尽管在语法上它有数组相关的属性 length，但它不从 Array.prototype 继承，实际上它是一个类数组对象。
+        // // 因此，无法对 arguments 变量使用标准的数组方法，比如 push, pop 或者 slice。但是可以使用数组中的length属性。
+        // var arr = Array.prototype.slice.call(arguments);
+        // function aa(){
+        //     console.log(arguments);
+        // }
+        // aa(11,22)
+        // // Arguments(2) [11, 22, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+         
+
+        // jquery3.2.1的闭包使用
+       (function(global, factory){
+           console.log(global);//window
+           factory()//会弹出1
+
+       })(typeof window !== 'undefined'?window:'11', function(){
+           alert(1)
+       })
+       (function(global, factory){
+           console.log(global);//window
+           factory()//undefined
+
+       })(typeof window !== 'undefined'?window:'11')
+    </script>
+</body>
+</html>
