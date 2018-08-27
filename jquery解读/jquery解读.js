@@ -73,6 +73,7 @@ if (status) {
 		// This accentuates the need for the creation of a real `window`.
 		// e.g. var jQuery = require("jquery")(window);
 		// See ticket #14549 for more info.
+		// 暴露函数
 		module.exports = global.document ?
 		// 类似于调用并执行function( window, noGlobal )
 			factory( global, true ) :
@@ -103,22 +104,32 @@ var document = window.document;
 //  定义对象返回对象的原型
 var getProto = Object.getPrototypeOf;
 
+// 分割数组（1，2）第一和第二个数组
 var slice = arr.slice;
 
+// 连接两个数组
 var concat = arr.concat;
 
+// 从末尾添加一个数或多个数，arrayObject.push(newelement1,newelement2,....,newelementX)
 var push = arr.push;
 
+//获取数组的index，索引
 var indexOf = arr.indexOf;
 
 var class2type = {};
 
+// 对象改写成字符串
 var toString = class2type.toString;
 
+
+// isPrototypeOf isPrototypeOf是用来判断指定对象object1是否存在于另一个对象object2的原型链中，是则返回true，否则返回false。 
+// 判断一个对象是否有名称的属性或对象，此方法无法检查该对象的原型链中是否具有该属性，该属性必须是对象本身的一个成员。 
+// 如果该属性或者方法是该 对象自身定义的而不是器原型链中定义的 则返回true;否则返回false; 
 var hasOwn = class2type.hasOwnProperty;
 
 var fnToString = hasOwn.toString;
 
+// 通过call改变实现继承，同事改变this的指向
 var ObjectFunctionString = fnToString.call( Object );
 
 var support = {};
@@ -128,9 +139,12 @@ var support = {};
 	function DOMEval( code, doc ) {
 		doc = doc || document;
 
+		// 创建script标签
 		var script = doc.createElement( "script" );
 
+		// script标签中写入指令
 		script.text = code;
+		// 标签下的head标签中插入子节点script，并切除掉子节点script
 		doc.head.appendChild( script ).parentNode.removeChild( script );
 	}
 /* global Symbol */
