@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./knockout-3.4.0.js"></script>
+    <script>
+        window.onload = function(){
+            var priceNode = document.getElementById('price'),
+    accountNode = document.getElementById('account'),
+    sumNode = document.getElementById('sum'),
+    price = 100,
+    account = 11,
+    sum = price * account;
+    //初始化。
+    priceNode.innerText = price;
+    accountNode.value = account;
+    sumNode.textContent = sum;
+    //监视 View层的用户输入
+    accountNode.addEventListener('keydown', function (e) {
+    window.setTimeout(function () {
+    account = accountNode.value;
+    sum = price * account;
+    sumNode.textContent = sum;
+    },10);
+    });
+        }
+    
+    </script>
+</head>
+<body>
+        Price: <span id="price"></span><br />
+        Account: <input type="text" id="account" value="" placeholder="请输入数量" /><br />
+        sum: <span id="sum"></span> 
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+    <script src="./jquery-1.10.2.js"></script>
+    <script async="async">
+            // window.onload =function(){
+            //     $.post("http://mpatient.dabaitest.7lk.cn/magnetic/topics",
+            //         {
+            //             channelId: 1
+            //         },
+            //     function(data,status){
+            //     alert("数据：" + data + "\n状态：" + status);
+            //     });
+            // }
+            // var getTime = new Date().getTime()
+            // alert(getTime)
+            // $(document).ready(function(){
+                // setTimeout(function(){
+                    // "http://mpatient.dabaitest.7lk.cn/magnetic/topics?time="+getTime,
+                //     $.post("http://mpatient.dabaitest.7lk.cn/magnetic/topics",
+                //     {
+                //         channelId: 1
+                //     },
+                // function(data,status){
+                // alert("数据：" + data + "\n状态：" + status);
+                // });
+                // },1)
+                $.ajax({url:"http://mpatient.dabaitest.7lk.cn/magnetic/topics",
+                type:'post',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({channelId: '1'}),
+                // 百度浏览器要用同步
+                async:false,
+                success: function (data) {
+                    alert(data.code)
+                    console.log(data,'data==========')
+                    // if (data.success) {
+                    //     // loadStreamrules();
+                    //     // resetAddStreamrule();
+                    //     // GMS.success(data.msg);
+                    // } else {
+                    //     console.log(data.msg);
+                    // }
+                },
+                fail: function(err) {
+                    console.log(err,'err=======')
+                }
+            })
+            // });
+    
+            // })
+        </script>
+</head>
+<body>
+    <script src="./vconsole.min.js?v=b0eb6c6bf2"></script>
+    <script>
+        var vConsole = new VConsole();
+    
+    </script>
+    
+</body>
+</html>
