@@ -599,12 +599,14 @@ jQuery.extend( {
 	},
 
 	// arg is for internal usage only
+	// ARG仅用于内部使用
 	map: function( elems, callback, arg ) {
 		var length, value,
 			i = 0,
 			ret = [];
 
 		// Go through the array, translating each of the items to their new values
+		// 遍历数组，将每个项转换为新值
 		if ( isArrayLike( elems ) ) {
 			length = elems.length;
 			for ( ; i < length; i++ ) {
@@ -616,6 +618,7 @@ jQuery.extend( {
 			}
 
 		// Go through every key on the object,
+		// 浏览对象的每个键
 		} else {
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
@@ -627,18 +630,24 @@ jQuery.extend( {
 		}
 
 		// Flatten any nested arrays
+		//平移任何嵌套数组
 		return concat.apply( [], ret );
 	},
 
 	// A global GUID counter for objects
+	// 对象的全局GUID计数器
 	guid: 1,
 
 	// Bind a function to a context, optionally partially applying any
 	// arguments.
+	// 将函数绑定到上下文，可选地部分应用任何
+	// 争论。
+	// 代理端口
 	proxy: function( fn, context ) {
 		var tmp, args, proxy;
 
 		if ( typeof context === "string" ) {
+			// 交换
 			tmp = fn[ context ];
 			context = fn;
 			fn = tmp;
@@ -646,17 +655,22 @@ jQuery.extend( {
 
 		// Quick check to determine if target is callable, in the spec
 		// this throws a TypeError, but we will just return undefined.
+		//快速检查以确定目标是否可调用，在规范中
+		//这会引发一个类型错误，但是我们将返回未定义的。
+
 		if ( !jQuery.isFunction( fn ) ) {
 			return undefined;
 		}
 
 		// Simulated bind
+		// 模拟绑定
 		args = slice.call( arguments, 2 );
 		proxy = function() {
 			return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
 		};
 
 		// Set the guid of unique handler to the same of original handler, so it can be removed
+		// 将唯一处理程序的GUID设置为原始处理程序的相同，以便可以移除
 		proxy.guid = fn.guid = fn.guid || jQuery.guid++;
 
 		return proxy;
@@ -666,6 +680,8 @@ jQuery.extend( {
 
 	// jQuery.support is not used in Core but other projects attach their
 	// properties to it so it needs to exist.
+	// /jj.Real.在核心中不使用支持，但其他项目附加其
+	//属性，因此它需要存在。
 	support: support
 } );
 
@@ -676,6 +692,7 @@ if ( typeof Symbol === "function" ) {
 // Populate the class2type map
 jQuery.each( "Boolean Number String Function Array Date RegExp Object Error Symbol".split( " " ),
 function( i, name ) {
+	// 将值小写，放到里面
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 } );
 
@@ -686,6 +703,7 @@ function isArrayLike( obj ) {
 	// `in` check used to prevent JIT error (gh-2145)
 	// hasOwn isn't used here due to false negatives
 	// regarding Nodelist length in IE
+	
 	var length = !!obj && "length" in obj && obj.length,
 		type = jQuery.type( obj );
 
@@ -773,18 +791,58 @@ var i,
 	// Regular expressions
 
 	// http://www.w3.org/TR/css3-selectors/#whitespace
+	// 字符串中，斜杠是用于转义的，若想输出斜杠，必须采用双斜杠来表示。
+	// 1、空白
+	// \\x20表示空格，\\t表示制表符，\\r表示回车符（即行结束符），\\n表示换行符，\\f表示换页符
 	whitespace = "[\\x20\\t\\r\\n\\f]",
 
+	// 2、标识符
+	// 第一部分：\\\\.，代表转义字符（包括unicode码），由反斜杠（\）打头后跟除换行和行结束符外的任意字符的字符串，在此，jQuery没有按照标准来匹配转义字符，而是用小数点来代表其后的字符，在实际代码中，会在Attr、Class、Id等类型名称和类型值转换中进行精确匹配。其CSS 3标准详见：http://www.w3.org/TR/CSS21/syndata.html#escaped-characters
+
+	// 第二部分：[\\w-]，表示由数字、英文字母以及中划线组成的标识符。
+
+	// 第三部分：[^\\x00-\\xa0]，表示非ASCII码。
 	// http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = "(?:\\\\.|[\\w-]|[^\0-\\xa0])+",
 
 	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
+	// 4、属性选择器
+	// 	正则表达式从左到右依次解释如下：
+	// "\\[" 表示左方括号
+	// whitespace + "*" 表示前后两者之间的任意多个空白字符，后同
+	// "*(" + characterEncoding + ")" 表示属性名称
+	// (?:([*^$|!~]?=) 表示=、*=、^=、$=、|=、!=、~=7种匹配符号
+	// "(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" 表示用单引号或双引号括起来的转义符或除反斜杠外的任意字符组合，或[标识]。其中\\3表示与(['\"])一致的字符，在此之所以用\\3表示，是因为(['\"])匹配的有可能是单引号也有可能是双引号，\\3表示在当前位置匹配与(['\"])一致的字符，也就是要么是成对的单引号或成对的双引号。3代表从正则表达式左侧数过来第3对圆括号（括号后跟?:的以及\\(不算）。
+	// \\] 表示右方括号
+
 	attributes = "\\[" + whitespace + "*(" + identifier + ")(?:" + whitespace +
 		// Operator (capture 2)
 		"*([*^$|!~]?=)" + whitespace +
 		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
 		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
 		"*\\]",
+
+	// 5、伪类选择器
+	// ":“ 表示冒号起头
+
+	// “(" + characterEncoding + ")" 表示伪类名称
+
+	// (?: \\( ( 第一组  | 第二组 | 第三组 ) \\) | ) 表示以圆括号括起来的三组匹配字符中的任意一组或没有，该子表达式中最后的竖线相当于?的作用，表示前面的表达式可以没有或有1个匹配项。
+
+	// 第一组：(['\"])((?:\\\\.|[^\\\\])*?)\\3  表示用单引号或双引号括起来的转义符或除反斜杠外的任意字符组合
+
+	// 第二组：((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)  表示转义字符或不包含反斜杠、圆括号和方括号的任意字符集合或符合属性选择器的字符集合
+
+	// 第三组：.* 表示任意多个除换行符和行结束符外的字符集合。
+
+	// 伪类是最复杂的正则表达式，其用于匹配伪类括号内选择器的三个部分经过测试，其主要用于匹配下列情况：
+
+	// 第一组：用于匹配括号内用单引号或双引号括起来的字符串，如：:contains('hello')
+
+	// 第二组：用于匹配括号内除属性、带括号的伪类外的选择器，即不存在嵌套的可能性的选择器，如：:eq(2)、:not(:first)
+
+	// 第三组：除上以外的所有选择器。
+
 
 	pseudos = ":(" + identifier + ")(?:\\((" +
 		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
