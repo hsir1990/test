@@ -8,11 +8,14 @@
 </head>
 <body>
     <script>
+        // 会弹出11
         var jQuery = function(){
-            return new jQuery.aa(); 
+            return new jQuery.pro().aa(); 
         }
-        jQuery.aa = function(){
-            alert(11)
+        jQuery.pro = jQuery.prototype = {
+            aa:function(){
+                alert(11)
+            }
         }
     </script>
 </body>

@@ -76,6 +76,7 @@ if (status) {
 		// 暴露函数
 		module.exports = global.document ?
 		// 类似于调用并执行function( window, noGlobal )
+		// noGlobal为true时，window.jQuery = window.$ = jQuery将不执行
 			factory( global, true ) :
 			function( w ) {
 				if ( !w.document ) {
@@ -157,6 +158,7 @@ var
 	version = "3.2.1",
 
 	// Define a local copy of jQuery
+	// 直接调用jquery,就是初始化init的方法
 	jQuery = function( selector, context ) {
 
 		// The jQuery object is actually just the init constructor 'enhanced'
@@ -166,33 +168,51 @@ var
 
 	// Support: Android <=4.0 only
 	// Make sure we trim BOM and NBSP
+
+	// \s：空格
+	// \uFEFF：字节次序标记字符（Byte Order Mark），也就是BOM,它是es5新增的空白符
+	// \xA0：禁止自动换行空白符，相当于html中的&nbsp;
 	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
+
+
 	// Matches dashed string for camelizing
+	// 匹配
 	rmsPrefix = /^-ms-/,
 	rdashAlpha = /-([a-z])/g,
 
+
+
+	
 	// Used by jQuery.camelCase as callback to replace()
 	fcamelCase = function( all, letter ) {
+		// 字符串转成大写
 		return letter.toUpperCase();
 	};
 
 jQuery.fn = jQuery.prototype = {
 
 	// The current version of jQuery being used
+	// 版本号
 	jquery: version,
 
+	// 构造函数
 	constructor: jQuery,
 
 	// The default length of a jQuery object is 0
+	// jqyery的长度为0
 	length: 0,
 
+	// 分割数组（1，2）第一和第二个数组
+	// var slice = arr.slice;
+	// 等于 arr.slice.call(this);//将this转换成数组
 	toArray: function() {
 		return slice.call( this );
 	},
 
 	// Get the Nth element in the matched element set OR
 	// Get the whole matched element set as a clean array
+
 	get: function( num ) {
 
 		// Return all the elements in a clean array
@@ -209,26 +229,34 @@ jQuery.fn = jQuery.prototype = {
 	pushStack: function( elems ) {
 
 		// Build a new jQuery matched element set
+		// this.constructor()方法将merge elems，用于数组，变相的说可以理解为elems是一个元素被插入到this.constructor中去了，以栈的形式插入，先进的后出
+
 		var ret = jQuery.merge( this.constructor(), elems );
 
 		// Add the old object onto the stack (as a reference)
+		// 将旧对象添加到堆栈中
 		ret.prevObject = this;
 
 		// Return the newly-formed element set
+		// 返回当前被合并的对象
 		return ret;
 	},
 
 	// Execute a callback for every element in the matched set.
+	// 对匹配集合中的每个元素执行回调, 同时会循环当下的的所有对象
 	each: function( callback ) {
 		return jQuery.each( this, callback );
 	},
 
+	// 遍历对象，将方法与属性，用堆栈的形式插入进去
+	// $.map将一个数组中的元素转换到另一个数组中。
 	map: function( callback ) {
 		return this.pushStack( jQuery.map( this, function( elem, i ) {
 			return callback.call( elem, i, elem );
 		} ) );
 	},
 
+	// 插入到栈
 	slice: function() {
 		return this.pushStack( slice.apply( this, arguments ) );
 	},
@@ -241,23 +269,30 @@ jQuery.fn = jQuery.prototype = {
 		return this.eq( -1 );
 	},
 
+	// 
 	eq: function( i ) {
 		var len = this.length,
+		// 判断i时候为负数，便于使用
 			j = +i + ( i < 0 ? len : 0 );
+			// 返回第j个dom对象
 		return this.pushStack( j >= 0 && j < len ? [ this[ j ] ] : [] );
 	},
 
 	end: function() {
+		// 返回上一个对象，或者jquery的这个对象
 		return this.prevObject || this.constructor();
 	},
 
 	// For internal use only.
 	// Behaves like an Array's method, not like a jQuery method.
+	// /只供内部使用。
+	//行为类似于数组的方法，而不是像jQuery方法那样。
 	push: push,
 	sort: arr.sort,
 	splice: arr.splice
 };
 
+// 对象之间的添加继承
 jQuery.extend = jQuery.fn.extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[ 0 ] || {},
@@ -266,20 +301,27 @@ jQuery.extend = jQuery.fn.extend = function() {
 		deep = false;
 
 	// Handle a deep copy situation
+	// 处理深度拷贝
+	// 判断目标对象target，是否为布尔值 aa(true)
 	if ( typeof target === "boolean" ) {
+
 		deep = target;
 
 		// Skip the boolean and the target
+		// 跳过ture或者false
 		target = arguments[ i ] || {};
 		i++;
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
+	// 当目标是字符串或某物时处理（可能在深拷贝中）
+	// 判断是否为对象或者为function
 	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
 		target = {};
 	}
 
 	// Extend jQuery itself if only one argument is passed
+	// 如果仅传递一个参数，则扩展jQuery本身
 	if ( i === length ) {
 		target = this;
 		i--;
@@ -288,19 +330,23 @@ jQuery.extend = jQuery.fn.extend = function() {
 	for ( ; i < length; i++ ) {
 
 		// Only deal with non-null/undefined values
+		// 只处理非空/未定义值
 		if ( ( options = arguments[ i ] ) != null ) {
 
 			// Extend the base object
+			// 扩展基本对象
 			for ( name in options ) {
 				src = target[ name ];
 				copy = options[ name ];
 
 				// Prevent never-ending loop
+				// 防止无休止循环
 				if ( target === copy ) {
 					continue;
 				}
 
 				// Recurse if we're merging plain objects or arrays
+				// 如果我们合并纯对象或数组，则递归
 				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
 					( copyIsArray = Array.isArray( copy ) ) ) ) {
 
@@ -316,7 +362,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 					target[ name ] = jQuery.extend( deep, clone, copy );
 
 				// Don't bring in undefined values
+				// 不要引入未定义的价值
 				} else if ( copy !== undefined ) {
+					// 一般情况走这个
 					target[ name ] = copy;
 				}
 			}
@@ -330,11 +378,15 @@ jQuery.extend = jQuery.fn.extend = function() {
 jQuery.extend( {
 
 	// Unique for each copy of jQuery on the page
+	// 页上的jQuery的每个副本都是唯一的
+	// 正则把所有非数字的替换成空，\D:类似[^0-9] 非数字
 	expando: "jQuery" + ( version + Math.random() ).replace( /\D/g, "" ),
 
 	// Assume jQuery is ready without the ready module
+	// 假设没有准备好的模块，jQuery已经就绪
 	isReady: true,
 
+	// 扔出错误信息
 	error: function( msg ) {
 		throw new Error( msg );
 	},
@@ -342,36 +394,53 @@ jQuery.extend( {
 	noop: function() {},
 
 	isFunction: function( obj ) {
+		// 判断是否是函数
 		return jQuery.type( obj ) === "function";
 	},
 
 	isWindow: function( obj ) {
+		// 判断是否为winodw对象，返回ture或false
 		return obj != null && obj === obj.window;
 	},
 
+	// 判断是否为数字
 	isNumeric: function( obj ) {
 
 		// As of jQuery 3.0, isNumeric is limited to
 		// strings and numbers (primitives or objects)
 		// that can be coerced to finite numbers (gh-2662)
+		// 		至于jQuery 3，iSimple仅限于
+
+		// //字符串和数字（原语或对象）
+
+		// //可以强制为有限数（GH-2662）
 		var type = jQuery.type( obj );
 		return ( type === "number" || type === "string" ) &&
 
 			// parseFloat NaNs numeric-cast false positives ("")
 			// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 			// subtraction forces infinities to NaN
+			// 			//PaysFuffNANS数值铸造假阳性（“”）
+
+			// 但是……但是错误地解释领先的数字串，特别是十六进制文字（“0x…”）。
+
+			// //减法迫使无穷大到南
+
 			!isNaN( obj - parseFloat( obj ) );
 	},
 
+	//判断是否为原对象1
 	isPlainObject: function( obj ) {
 		var proto, Ctor;
 
 		// Detect obvious negatives
 		// Use toString instead of jQuery.type to catch host objects
+		// 
 		if ( !obj || toString.call( obj ) !== "[object Object]" ) {
 			return false;
 		}
 
+		// 对象返回对象的原型
 		proto = getProto( obj );
 
 		// Objects with no prototype (e.g., `Object.create( null )`) are plain
@@ -380,16 +449,19 @@ jQuery.extend( {
 		}
 
 		// Objects with prototype are plain iff they were constructed by a global Object function
+		// 具有原型的对象是平坦的IFF，它们由全局对象函数构造。
 		Ctor = hasOwn.call( proto, "constructor" ) && proto.constructor;
 		return typeof Ctor === "function" && fnToString.call( Ctor ) === ObjectFunctionString;
 	},
 
+	// 判断是否为空对象
 	isEmptyObject: function( obj ) {
 
 		/* eslint-disable no-unused-vars */
 		// See https://github.com/eslint/eslint/issues/6125
 		var name;
 
+		// 如果obj为空则将不执行
 		for ( name in obj ) {
 			return false;
 		}
@@ -397,17 +469,20 @@ jQuery.extend( {
 	},
 
 	type: function( obj ) {
+		// typeof null  返回 object
 		if ( obj == null ) {
 			return obj + "";
 		}
 
 		// Support: Android <=2.3 only (functionish RegExp)
+		// 判断obj是否为object或function
 		return typeof obj === "object" || typeof obj === "function" ?
 			class2type[ toString.call( obj ) ] || "object" :
 			typeof obj;
 	},
 
 	// Evaluates a script in a global context
+	// 在全局上下文中评估脚本
 	globalEval: function( code ) {
 		DOMEval( code );
 	},
@@ -415,13 +490,18 @@ jQuery.extend( {
 	// Convert dashed to camelCase; used by the css and data modules
 	// Support: IE <=9 - 11, Edge 12 - 13
 	// Microsoft forgot to hump their vendor prefix (#9572)
+	//转换成CAMELSE；由CSS和数据模块使用
+	//支持：IE＝9 - 11，边12 - 13。
+	//微软忘记驼峰他们的供应商前缀（9572）
+
+	// 匹配-ms-
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
-
+	// 循环
 	each: function( obj, callback ) {
 		var length, i = 0;
-
+		// 是否为数组活着隐形数组
 		if ( isArrayLike( obj ) ) {
 			length = obj.length;
 			for ( ; i < length; i++ ) {
@@ -431,6 +511,7 @@ jQuery.extend( {
 			}
 		} else {
 			for ( i in obj ) {
+				// 没有了以后停止执行
 				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
 					break;
 				}
@@ -441,23 +522,31 @@ jQuery.extend( {
 	},
 
 	// Support: Android <=4.0 only
+	// 
 	trim: function( text ) {
 		return text == null ?
 			"" :
+			// 变成字符串，匹配去除空格
+			// rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
 			( text + "" ).replace( rtrim, "" );
 	},
 
 	// results is for internal usage only
+	// 结果仅供内部使用
+
 	makeArray: function( arr, results ) {
 		var ret = results || [];
-
+		//arr不为null
 		if ( arr != null ) {
+			// 是否为数组活着隐形数组
 			if ( isArrayLike( Object( arr ) ) ) {
 				jQuery.merge( ret,
 					typeof arr === "string" ?
 					[ arr ] : arr
 				);
 			} else {
+				// push进去
+				// var push = arr.push;
 				push.call( ret, arr );
 			}
 		}
@@ -466,16 +555,18 @@ jQuery.extend( {
 	},
 
 	inArray: function( elem, arr, i ) {
+		// 判断arr是否为null，如果是返回-1，否泽返回索引
 		return arr == null ? -1 : indexOf.call( arr, elem, i );
 	},
 
 	// Support: Android <=4.0 only, PhantomJS 1 only
 	// push.apply(_, arraylike) throws on ancient WebKit
+	// first  merge  secend最后返回first
 	merge: function( first, second ) {
 		var len = +second.length,
 			j = 0,
 			i = first.length;
-
+		// 注意写法，直接将j定义到了for循环的外边
 		for ( ; j < len; j++ ) {
 			first[ i++ ] = second[ j ];
 		}
@@ -484,7 +575,7 @@ jQuery.extend( {
 
 		return first;
 	},
-
+	// 检索目标行命令
 	grep: function( elems, callback, invert ) {
 		var callbackInverse,
 			matches = [],
@@ -494,6 +585,9 @@ jQuery.extend( {
 
 		// Go through the array, only saving the items
 		// that pass the validator function
+		// /通过数组，只保存项目
+
+		// /通过验证程序功能	
 		for ( ; i < length; i++ ) {
 			callbackInverse = !callback( elems[ i ], i );
 			if ( callbackInverse !== callbackExpect ) {
@@ -585,6 +679,7 @@ function( i, name ) {
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 } );
 
+// 是否为数组活着隐形数组
 function isArrayLike( obj ) {
 
 	// Support: real iOS 8.2 only (not reproducible in simulator)
@@ -660,11 +755,13 @@ var i,
 	slice = arr.slice,
 	// Use a stripped-down indexOf as it's faster than native
 	// https://jsperf.com/thor-indexof-vs-for/5
+	// 判断数组list的第几歌等于elem，如果等于返回索引，如果不等于则返回-1，
 	indexOf = function( list, elem ) {
 		var i = 0,
 			len = list.length;
 		for ( ; i < len; i++ ) {
 			if ( list[i] === elem ) {
+				// 此处可以直接返回并结束for循环
 				return i;
 			}
 		}
@@ -10293,12 +10390,15 @@ var
 	// Map over the $ in case of overwrite
 	_$ = window.$;
 
+// 没有配置的时候，可以直接使用jQuwey直接使用，
 jQuery.noConflict = function( deep ) {
 	if ( window.$ === jQuery ) {
+		// 私有方法的引用，在没有require的时候使用
 		window.$ = _$;
 	}
 
 	if ( deep && window.jQuery === jQuery ) {
+		// 私有方法的引用，在没有require的时候使用，但是想用require可以的
 		window.jQuery = _jQuery;
 	}
 
@@ -10308,6 +10408,7 @@ jQuery.noConflict = function( deep ) {
 // Expose jQuery and $ identifiers, even in AMD
 // (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 // and CommonJS for browser emulators (#13566)
+//在使用require.js的时候不会执行这句
 if ( !noGlobal ) {
 	window.jQuery = window.$ = jQuery;
 }
