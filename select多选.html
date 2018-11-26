@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <select>
+
+                  <option value ="volvo">Volvo</option>
+                
+                  <option value ="saab">Saab</option>
+                
+                  <option value="opel">Opel</option>
+                
+                  <option value="audi">Audi</option>
+                
+                </select>
+                
+                <!-- 其中，</option>标签可以省掉，在页面中用法 -->
+                
+                <SELECT NAME="studyCenter" id="studyCenter"  SIZE="1">
+                
+                           <OPTION VALUE="0">全部
+                
+                           <OPTION VALUE="1">湖北电大网络学习中心
+                
+                           <OPTION VALUE="2">成都师范学院网络学习中心
+                
+                           <OPTION VALUE="3">武汉职业技术学院网络学习中心
+                
+                   </SELECT>
+                
+                <!-- 二、Select元素还可以多选，看如下代码：
+                
+                //有multiple属性，则可以多选 -->
+                <select name= “education” id=”education” multiple=”multiple”>
+                       <option value=”1”>高中</option>
+                       <option value=”2”>大学</option>
+                       <option value=”3”>博士</option>
+                </select>
+                
+                <!-- //下面没有multiple属性 , 只显示一条，不能多选 -->
+                <select name= “education” id=”education” >
+                       <option value=”1”>高中</option>
+                       <option value=”2”>大学</option>
+                       <option value=”3”>博士</option>
+                </select>
+                <!-- //下面是设置了size属性的情况 , 如果size = 3 那么就显示三条数据，注意不能多选的。 -->
+                <select name="education" id="education" size='3'>
+                         <option value="0">小学</option>
+                         <option value="1">初中</option>
+                         <option value="2">高中</option>
+                         <option value="3">中专</option>
+                         <option value="4">大专</option>
+                         <option value="5">本科</option>
+                         <option value="6">研究生</option>
+                         <option value="7">博士</option>
+                         <option value="8">博士后</option>
+                         <option selected>请选择</option>
+                </select>
+                
+                 <script>
+                
+                // 三、 多选Select组件涉及的所有常用操作：
+                
+                // 1.      判断select选项中是否存在指定值的Item 
+                
+                // @param objSelectId 将要验证的目标select组件的id
+                
+                // @param objItemValue 将要验证是否存在的值
+                
+                function isSelectItemExit(objSelectId,objItemValue)  {  
+                 var objSelect = document.getElementById(objSelectId);
+                    var isExit = false;  
+                    if (null != objSelect && typeof(objSelect) != "undefined") {
+                     for(var i=0;i<objSelect.options.length;i++) {  
+                         if(objSelect.options[i].value == objItemValue) {  
+                             isExit = true;  
+                             break;  
+                         }  
+                     }  
+                    }
+                    return isExit; 
+                 }
+                
+                // 2.      向select选项中加入一个Item
+                
+                // @param  objSelectId 将要加入item的目标select组件的id
+                // @param objItemText 将要加入的item显示的内容
+                // @param objItemValue 将要加入的item的值
+                
+                function addOneItemToSelect(objSelectId,objItemText,objItemValue) {  
+                 var objSelect = document.getElementById(objSelectId);
+                    if (null != objSelect && typeof(objSelect) != "undefined") {
+                      //判断是否该值的item已经在select中存在 
+                     if(isSelectItemExit(objSelectId,objItemValue)) {  
+                         $.messager.alert('提示消息','该值的选项已经存在!','info');
+                     }  else  {
+                         var varItem = new Option(objItemText,objItemValue);  
+                         objSelect.options.add(varItem);  
+                     }  
+                    } 
+                }
+                
+                // 3.    从select选项中删除选中的项，支持多选多删
+                
+                // @param objSelectId 将要进行删除的目标select组件id
+                
+                function removeSelectItemsFromSelect(objSelectId) {  
+                 var objSelect = document.getElementById(objSelectId);
+                 var delNum = 0;
+                     if (null != objSelect && typeof(objSelect) != "undefined") {
+                        for(var i=0;i<objSelect.options.length;i=i+1) {  
+                            if(objSelect.options[i].selected) {  
+                                objSelect.options.remove(i);  
+                                delNum = delNum + 1;
+                                i = i - 1;
+                            }  
+                        }         
+                     if (delNum <= 0 ) {
+                      $.messager.alert('提示消息','请选择你要删除的选项!','info');
+                     } else {
+                      $.messager.alert('提示消息','成功删除了'+delNum+'个选项!','info');
+                     }
+                     } 
+                }
+                
+                // 4.      从select选项中按指定的值删除一个Item   
+                //   @param objSelectId 将要验证的目标select组件的id
+                //   @param objItemValue 将要验证是否存在的值
+                
+                function removeItemFromSelectByItemValue(objSelectId,objItemValue) {  
+                 var objSelect = document.getElementById(objSelectId);
+                     if (null != objSelect && typeof(objSelect) != "undefined") {
+                      //判断是否存在
+                       if(isSelectItemExit(objSelect,objItemValue)) {  
+                         for(var i=0;i<objSelect.options.length;i++) {  
+                             if(objSelect.options[i].value == objItemValue) {  
+                                 objSelect.options.remove(i);  
+                                 break;  
+                             }  
+                         }         
+                         $.messager.alert('提示消息','成功删除!','info');             
+                     } else {  
+                         $.messager.alert('提示消息','不存在指定值的选项!','info');  
+                     }     
+                     } 
+                }
+                
+                // 5.      清空select中的所有选项
+                
+                // @param objSelectId 将要进行清空的目标select组件id
+                function clearSelect(objSelectId) {  
+                 var objSelect = document.getElementById(objSelectId);
+                     if (null != objSelect && typeof(objSelect) != "undefined") {
+                        for(var i=0;i<objSelect.options.length;) {  
+                          objSelect.options.remove(i);  
+                        }         
+                     } 
+                }
+                
+                // 6. 获取select中的所有item，并且组装所有的值为一个字符串，值与值之间用逗号隔开
+                //  @param objSelectId 目标select组件id
+                //  @return select中所有item的值，值与值之间用逗号隔开
+                function getAllItemValuesByString(objSelectId) {
+                 var selectItemsValuesStr = "";
+                 var objSelect = document.getElementById(objSelectId);
+                 if (null != objSelect && typeof(objSelect) != "undefined") {
+                      var length = objSelect.options.length
+                        for(var i = 0; i < length; i = i + 1) {  
+                         if (0 == i) {
+                            selectItemsValuesStr = objSelect.options[i].value;
+                         } else {
+                            selectItemsValuesStr = selectItemsValuesStr + "," + objSelect.options[i].value;
+                         }
+                        }   
+                     }  
+                     return selectItemsValuesStr;
+                }
+                
+                // 7. 将一个select中的所有选中的选项移到另一个select中去
+                //   @param fromObjSelectId  移动item的原select组件id
+                //   @param toObjectSelectId  移动item将要进入的目标select组件id
+                 function moveAllSelectedToAnotherSelectObject(fromObjSelectId, toObjectSelectId) {  
+                 var objSelect = document.getElementById(fromObjSelectId);
+                 var delNum = 0;
+                     if (null != objSelect && typeof(objSelect) != "undefined") {
+                        for(var i=0;i<objSelect.options.length;i=i+1) {  
+                            if(objSelect.options[i].selected) {  
+                                addOneItemToSelect(toObjectSelectId,objSelect.options[i].text,objSelect.options[i].value)
+                                objSelect.options.remove(i);
+                                i = i - 1;
+                            }
+                        }         
+                     } 
+                }
+                
+                // 8. 将一个select中的所有选项移到另一个select中去
+                //  @param fromObjSelectId  移动item的原select组件id
+                //  @param toObjectSelectId  移动item将要进入的目标select组件id
+                 function moveAllToAnotherSelectObject(fromObjSelectId, toObjectSelectId) {  
+                 var objSelect = document.getElementById(fromObjSelectId);
+                     if (null != objSelect) {
+                      for(var i=0;i<objSelect.options.length;i=i+1) {  
+                             addOneItemToSelect(toObjectSelectId,objSelect.options[i].text,objSelect.options[i].value)
+                             objSelect.options.remove(i);
+                             i = i - 1;
+                        }   
+                     } 
+                }
+                
+                
+                </script>
+                
+                
+
+</body>
+</html>
