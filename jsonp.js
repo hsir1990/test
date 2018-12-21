@@ -1,5 +1,5 @@
 //浏览器器端
-<script type="text/javascript">
+{/* <script type="text/javascript"> */}
     //定义一个发送Jsonp请求的函数
     function jsonp(obj) {
         //定义一个处理Jsonp返回数据的回调函数
@@ -15,9 +15,9 @@
         //将创建的新节点添加到BOM树上
         document.getElementsByTagName("body")[0].appendChild(script);  
     }
-</script>
+// </script>
  
-<script type="text/javascript">
+{/* <script type="text/javascript"> */}
     //调用Jsonp函数发送jsonp请求
     jsonp({
         url:"http://localhost/index.php",
@@ -28,5 +28,5 @@
             alert("性别" + obj.sex);
         }
     });
-</script>
+// </script>
 // jsonp的会掉函数返回的数据，绑定了，你穿入的对象里面了jsonp({});
