@@ -318,6 +318,7 @@
         $.ajaxSetup({
             timeout: 60 * 1000,
             beforeSend: function (xhr, config) {
+                console.log('每一次ajax都会请求加载一次！')
                 if (!H.Cookie.get('userToken')) {
                     //中断当前请求
                     xhr.abort();
