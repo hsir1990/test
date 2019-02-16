@@ -46,8 +46,8 @@
 
 
 //   或者
-(function($){
-    $.currentDate=function(){
-        return new Date();
-    }
-})(Utils={});
+// (function($){
+//     $.currentDate=function(){
+//         return new Date();
+//     }
+// })(Utils={});
