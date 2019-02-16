@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax的封装</title>
+</head>
+<body>
+    <script src="./jquery-1.10.2.js"></script>
+    <script>
+        // // 最后面的兼容ie6
+        // let xhr =  window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        // // 连接服务器
+        // xhr.open('GET', './account_content.html', true);
+        // // 发送请求
+        // xhr.send();
+        // // 接受返回数据
+        // /*
+        // ** 每当readyState改变时，就会触发onreadystatechange事件
+        // ** readyState属性存储有XMLHttpRequest的状态信息
+        // ** 0 ：请求未初始化
+        // ** 1 ：服务器连接已建立
+        // ** 2 ：请求已接受
+        // ** 3 : 请求处理中
+        // ** 4 ：请求已完成，且相应就绪
+        // */
+        // xhr.onreadystatechange = function () {
+                // if(xmlHttp.readyState!=4){
+                //     alert('响应超时');
+                //     //关闭请求，相当于jq中的xhr.abort()
+                //     xmlHttp.close();
+
+                // }
+        //     if(xhr.readyState == 4){
+        //          /*
+        //         ** Http状态码
+        //         ** 1xx ：信息展示
+        //         ** 2xx ：成功
+        //         ** 3xx ：重定向
+        //         ** 4xx : 客户端错误
+        //         ** 5xx ：服务器端错误
+        //         */
+        //         if(xhr.status == 200){
+        //             console.log(xhr.responseText);
+        //         } else {
+        //             if(failed){
+        //                 console.log(xhr.status);
+        //             }
+        //         }
+        //     }
+        // }
+
+
+
+
+
+        // // 封装ajax
+        // function ajax(obj){
+        //     obj = obj || {};
+
+        //     obj.data = obj.data || {};
+
+        //     obj.type = (obj.type || 'GET').toUpperCase();
+
+        //     obj.dataType = obj.dataType || 'json';
+
+        //     obj.async = obj.async || true;
+
+        //     let xhr =  window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');;
+            
+
+        //     if(obj.type == 'GET'){
+        //         xhr.open('GET', obj.url + '?' + params(obj.data), obj.async);
+        //         xhr.timeout = 20000;
+        //         xhr.ontimeout = function (){
+        //             console.log('超时');
+        //         }
+        //         xhr.send(null)
+                
+
+        //     } else {
+        //         xhr.open('POST', obj.url, obj.async);
+        //         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //         xhr.timeout = 20000;
+        //         xhr.ontimeout = function (){
+        //             console.log('超时');
+        //         }
+        //         xhr.send(params(obj.data))
+        //     }
+
+        //     xhr.onreadystatechange = function(){
+        //         if(xhr.readyState == 4){
+        //             if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+        //                 obj.success(xhr.responseText);
+        //             } else {
+        //                 obj.fail(xhr.status);
+        //             }
+        //         }
+
+        //     }
+            
+        // };
+
+
+        
+
+        // function params(data){
+        //     let arr = [];
+        //     for(let params in data){
+        //         arr.push(encodeURIComponent(params) + '=' + encodeURIComponent(data[params]))
+        //     }
+        //     //防止页面缓存
+        //     arr.push('randomNumber=' + Math.random());
+        //     arr.join('&');
+        //     return arr;//["name1=value1", "randomNumber=0.814510583766568"]
+        // }
+
+
+
+        // ajax({
+        //     method: 'GET',
+        //     url: './account_content.html',
+        //     data: {
+        //         name1: 'value1'
+        //     },
+        //     async: true,
+        //     dataType: 'json',
+        //     success: function (response) {
+        //         console.log(response)
+        //     }
+        // });
+
+
+
+
+        // // 封装jq的ajax的包
+        // const postJson = function(config, params, callback){
+        //     let data = $.extend({}, params)
+        //     return $.ajax({
+        //         type: "POST",
+        //         contentType: "application/json",
+        //         url: config.url,
+        //         headers:config.headers || {},
+        //         timeout: 20000,
+        //         data: data,
+        //         dataType: "json",
+        //         beforeSend: function () {
+        //             console.log('请求之前。。。')
+        //         },
+        //         success: function (data) {
+        //             console.log('post请求成功。。。');
+        //             callback&&callback(data)
+        //         },
+        //         complete: function () {
+        //             console.log('请求完成。。。')
+        //         },
+        //         error: function (data) {
+        //             console.info("error: " + data);
+        //             callback&&callback({
+        //                 "code": 1,
+        //                 "data": data.responseText,
+        //                 "msg":"网络错误或超时"
+        //             })
+        //         }
+        //     });
+        // }
+        // postJson({url:'',headers:'{}'},{name1: 'value1'},function(data){
+        //     console.log(data)
+        // })
+
+
+        // const postJson = function(config, params, callback){
+        //     let data = $.extend({}, params)
+        //     return $.ajax({
+        //         type: "POST",
+        //         // contentType: "application/json",
+        //         url: config.url,
+        //         headers:config.headers || {},
+        //         timeout: 20000,
+        //         data: data,
+        //         dataType: "json",
+        //         beforeSend: function () {
+        //             console.log('请求之前。。。')
+        //         },
+        //         success: function (data) {
+        //             console.log('post请求成功。。。');
+        //             callback&&callback(data)
+        //         },
+        //         complete: function () {
+        //             console.log('请求完成。。。')
+        //         },
+        //         error: function (data) {
+        //             console.info("error: " + data);
+        //             callback&&callback({
+        //                 "code": 1,
+        //                 "data": data.responseText,
+        //                 "msg":"网络错误或超时"
+        //             })
+        //         }
+        //     });
+        // }
+        // postJson({url:'',headers:'{}'},{name1: 'value1'},function(data){
+        //     console.log(data)
+        // })
+
+        // var getJson = function(config,params,callback){
+        //     return $.ajax({
+        //         url: config.url,
+        //         type: "GET",
+        //         timeout:8000,
+        //         data: $.extend({}, params),
+        //         dataType: 'json',
+        //         _beforeSend: function () {
+        //             console.log('请求之前。。。')
+        //         },
+        //         success: function (re) {
+        //             console.log('post请求成功。。。');
+        //             callback&&callback(data)
+        //         },
+        //         error: function () {
+        //             console.info("error: " + data);
+        //             callback&&callback({
+        //                 "code": 1,
+        //                 "data": data.responseText,
+        //                 "msg":"网络错误或超时"
+        //             })
+        //         },
+        //         complete: function () {
+        //             console.log('请求完成。。。')
+        //         }
+        //     })
+        // }
+        
+        // getJson({url:''},{name1: 'value1'},function(data){
+        //     console.log(data)
+        // })
+
+
+        var getJsonp = function(config,params,callback){
+            return $.ajax({
+                url: config.url,
+                type: "GET",
+                timeout:8000,
+                data: $.extend({},params),
+                success: function(json){
+                    // 先删除ajax的参数，对象
+                    deleteAjax(config);
+                    // 判断返回的参数是否为null
+                    if (json == null) {
+                        return;
+                    }
+                    
+                    callback&&callback(json);
+                },
+                error:function(e){
+                    if(window.location.hash!=''&&window.location.hash==config.pageId){
+                        callback&&callback({'msg':'网络错误或超时','code':1});
+                    }
+                    //alert('网络错误或超时')
+                    // callback&&callback({'error':'网络错误或超时'});
+                    console.log('网络错误或超时',callback);
+                },
+                dataType: "jsonp"
+            });
+            if (typeof window.xhrPool[config.url] != 'undefined') {
+                //如果请求池里已经有同样的请求，先将它中断
+                window.xhrPool[config.url].abort();
+            }
+        }
+
+        
+        // 删除ajax的参数对象
+        var ajaxOjb = {key:'',value:{}};
+        var deleteAjax = function(config){
+            if(config.pageId&&config.pageId!=''){
+                delete ajaxOjb.value[config.areaId];
+            }
+        };
+
+        /**
+         * [magAjax 管理ajax 结束掉上页面未完成的请求]
+         * @param  {[type]} config [页面配置]
+         * @param  {[type]} xhr    [ajax 对象]
+         * @return {[type]}        [description]
+         */
+         
+        manageAjax = function(config,xhr){
+            if(ajaxOjb.key==config.pageId||ajaxOjb.key==''){
+                ajaxOjb.key = config.pageId;
+                ajaxOjb.value[config.areaId] = xhr;
+            }else{
+                for (key in ajaxOjb.value) {
+                    ajaxOjb.value[key].abort();
+                }
+            }
+        };
+
+
+        var ajax = function(config, params,callback) {
+            var xhr = postJson(config, params,callback);
+            manageAjax(config,xhr);
+            return xhr;
+        };
+
+
+
+
+
+        // 使用ajaxSteup()方法可以设置一些全局性选项值，设置完成后，后边的Ajax将不再需要添加这些选项值，它的调用格式为
+
+        // jquery.ajaxSteup([options])、$.ajaxSteup([options])
+
+        // options：这个参数作为一个对象，通过设置Ajax请求时的全局选项值。
+
+
+
+        $.ajaxSetup({
+            timeout: 60 * 1000,
+            beforeSend: function (xhr, config) {
+                console.log('每一次ajax都会请求加载一次！')
+                if (!H.Cookie.get('userToken')) {
+                    //中断当前请求
+                    xhr.abort();
+                    //中断请求池中的所有请求
+                    $.each(window.xhrPool, function (xhrName, xhr) {
+                        xhr.abort();
+                    });
+
+                    H.alert('用户票据信息已过期，请刷新页面重新登录！');
+                } else {
+                    // 控制调用接口后，刷新cookies
+                    var data ={
+                        "userId": H.Cookie.get('userId'),
+                        "userIdentity": H.Cookie.get('userIdentity'),
+                        "userName": H.Cookie.get('userName'),
+                        "userNickName": H.Cookie.get('userNickName'),
+                        "userRealName": H.Cookie.get('userRealName'),
+                        "userToken": H.Cookie.get('userToken')
+                    }
+                    $.ajax({
+                        beforeSend:'',
+                        url: 'http://oss.7lk.com/user/loginRefresh',
+                        type: 'get',
+                        data: data,
+                        dataType: 'jsonp',
+                        success: function (re) {
+                            console.log('cook成功')
+                        },
+                        error: function () {
+                            console.info('get version fail');
+                        }
+                    })
+                    if (typeof window.xhrPool[config.url] != 'undefined') {
+                        //如果请求池里已经有同样的请求，先将它中断
+                        window.xhrPool[config.url].abort();
+                    }
+
+                    //把请求的 deferred 对象放入请求池
+                    window.xhrPool[config.url] = xhr;
+
+                    if (config._beforeSend && typeof config._beforeSend == 'function') {
+                        config._beforeSend();
+                    }
+                                
+                }
+            },
+        });
+    </script>
+</body>
+</html>
