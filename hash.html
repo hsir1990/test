@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hash</title>
+</head>
+<body>
+    <input type="button">
+
+    <script>
+        const aBut = document.querySelector('input');
+        let indexId = 1;
+        aBut.onclick = function(){
+            indexId++;
+            // "hase?'page = " + indexId,链接后面不能跟空格，否则或出现乱了字符，在谷歌中  #hase?'page=%202
+            var urlStr = "hase?'page=" + indexId;
+            window.history.pushState("", "", "#" + urlStr);
+            var url = location.hash; //获取url中"?"符后的字串  
+            var theRequest = new Object();  
+            if (url.indexOf("?") != -1) {  
+                var str = url.substr(1);  
+                strs = str.split("&");  
+                for(var i = 0; i < strs.length; i ++) {  
+                    theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+                }  
+            }  
+
+            console.log(theRequest);
+
+        }
+        
+
+        // pushState修改url不能被hashchange所监听。//但是他能监听由pushstatue形成的翻页
+        window.addEventListener( 'hashchange', function(){
+            alert(indexId)
+        })
+    </script>
+</body>
+</html>
