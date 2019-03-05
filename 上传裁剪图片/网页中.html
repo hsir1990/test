@@ -6,8 +6,8 @@
         <title>基于cropper.js的图片裁剪</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <meta name="format-detection" content="telephone=no">
-        <link rel="stylesheet" href="./cropper.css">
-        <link rel="stylesheet" href="./ImgCropping.css">
+        <link rel="stylesheet" href="css/cropper.min.css">
+        <link rel="stylesheet" href="css/ImgCropping.css">
  
         <style>
             .str {
@@ -22,16 +22,6 @@
     </head>
  
     <body>
-
-        <!-- h5标签可以直接吊起相机和录音 -->
-        <!-- //Demo1:允许用户选择多张图片;ios中掉图片&&相机；android掉图片&&相机&&文件管理 -->
-        <input type='file' accept="image/*" multiple/>
-        
-        <!-- //Demo2:默认打开照相机、摄像机、录音 -->
-        <input type="file" accept="image/*" capture="camera">
-        <input type="file" accept="video/*" capture="camcorder">
-        <input type="file" accept="audio/*" capture="microphone">
-
         <label title="上传图片" for="chooseImg" class="l-btn choose-btn">
          <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)">
                     选择图片
@@ -70,10 +60,8 @@
         </div>
         <!--图片裁剪框 end-->
  
-        <script src="./jquery-1.10.2.js"></script>
-        <script src="./cropper.js"></script>
-        <!-- <script src="./jquery-1.5.2.js"></script>
-        <script src="./cropper15.js"></script> -->
+        <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+        <script src="js/cropper.min.js"></script>
            <script type="text/javascript">  
     //弹出框水平垂直居中  
     (window.onresize = function() {  

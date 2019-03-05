@@ -70,10 +70,10 @@
         </div>
         <!--图片裁剪框 end-->
  
-        <script src="./jquery-1.10.2.js"></script>
-        <script src="./cropper.js"></script>
-        <!-- <script src="./jquery-1.5.2.js"></script>
-        <script src="./cropper15.js"></script> -->
+        <!-- <script src="./jquery-1.10.2.js"></script>
+        <script src="./cropper.js"></script> -->
+        <script src="./jquery-1.5.2.js"></script>
+        <script src="./cropper15.js"></script>
            <script type="text/javascript">  
     //弹出框水平垂直居中  
     (window.onresize = function() {  
@@ -131,16 +131,16 @@
         }  
     });  
     // 旋转  
-    $(".cropper-rotate-btn").on("click", function() {  
+    $(".cropper-rotate-btn").live("click", function() {  
         $('#tailoringImg').cropper("rotate", 45);  
     });  
     // 复位  
-    $(".cropper-reset-btn").on("click", function() {  
+    $(".cropper-reset-btn").live("click", function() {  
         $('#tailoringImg').cropper("reset");  
     });  
     // 换向  
     var flagX = true;  
-    $(".cropper-scaleX-btn").on("click", function() {  
+    $(".cropper-scaleX-btn").live("click", function() {  
         if (flagX) {  
             $('#tailoringImg').cropper("scaleX", -1);  
             flagX = false;  
@@ -152,14 +152,14 @@
     });  
       
     // 确定按钮点击事件  
-    $("#sureCut").on("click", function() {  
+    $("#sureCut").live("click", function() {  
         if ($("#tailoringImg").attr("src") == null) {  
             return false;  
         } else {  
             var cas = $('#tailoringImg').cropper('getCroppedCanvas');// 获取被裁剪后的canvas  
             var base64 = cas.toDataURL('image/jpeg'); // 转换为base64  
-      
-                $("#finalImg").prop("src", base64);// 显示图片  
+      console.log(base64)
+                $("#finalImg").data("src", base64);// 显示图片  
             uploadFile(encodeURIComponent(base64))//编码后上传服务器  
             closeTailor();// 关闭裁剪框  
             }  
@@ -182,6 +182,8 @@
                 }  
             });  
         }  
+
+
     </script>  
  
     </body>
