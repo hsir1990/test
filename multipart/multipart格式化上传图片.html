@@ -1,0 +1,123 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form id="for1" action="http://home.zongheng.com/api/setting/image" style="margin-top:20px;" method="post" enctype="multipart/form-data" target="nm_iframe">
+	<input type="file" name="imageFile" id="file1">
+	<input type="text" name="str" value="2">
+			<input id="aa" type="submit" value="上传">
+			<input id="aaa" type="button" value="上传">
+</form>
+	<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+    
+	<script src="jquery-1.10.2.js"></script>
+	<script>
+
+
+		// $('#aa').on('submit', function(){
+		// 	enctype="multipart/form-data"
+		// })
+
+
+
+		
+		// $("#for1").attr("enctype","multipart/form-data");
+		
+		// var formData = new FormData($("#for1")[0]);
+		// 		formData.append("imageFile","1111.jpg");
+		// // 		console.log(formData)
+                
+        // $('#aaa').on('click', function(){
+		// 	$.ajax({  
+		// 		url: "http://home.zongheng.com/api/setting/image",
+		// 		type: 'POST',  
+		// 		data: formData,  
+		// 		timeout : 10000, //超时时间设置，单位毫秒
+		// 		async: true,  
+		// 		cache: false,  
+		// 		contentType: "multipart/form-data",  
+		// 		processData: false,
+		// 		success: function (result) { 
+		// 			console.log(result.msg);
+		// 		},  
+		// 		error: function (returndata) {
+		// 			console.log(returndata);
+		// 		}
+		// 	});
+		// })      
+		
+		
+
+// ajax上传multipart/form-data
+
+		console.log('00000')
+                var cas = $('#tailoringImg').cropper('getCroppedCanvas');// 获取被裁剪后的canvas  
+                // console.log(cas)
+                var base64 = cas.toDataURL('image/jpeg'); // 转换为base64  
+                // console.log(base64)
+                // $("#finalImg").data("src", base64);// 显示图片  
+
+
+                            //将base64转换为blob
+                function dataURLtoBlob(dataurl) { 
+                    var arr = dataurl.split(','),
+                        mime = arr[0].match(/:(.*?);/)[1],
+                        bstr = atob(arr[1]),
+                        n = bstr.length,
+                        u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    return new Blob([u8arr], { type: mime });
+                }
+                //将blob转换为file
+                function blobToFile(theBlob, fileName){
+                theBlob.lastModifiedDate = new Date();
+                theBlob.name = fileName;
+                return theBlob;
+                }
+                //调用
+                var blob = dataURLtoBlob(base64);
+                var imageFile = blobToFile(blob, "1111.jpg");
+
+
+
+                $("#registerForm").attr("enctype","multipart/form-data");
+		
+                var formData = new FormData($("#registerForm")[0]);
+                formData.append("imageFile",imageFile);//
+                formData.append("fileFileName","1111.jpg");
+
+
+                $.ajax({
+                    type: "post",
+                    url: '/api/setting/image',
+                    data: formData,
+                    async: true,  
+                    cache: false,  
+                    contentType: false,  
+                    processData: false,
+                    error: function () {
+                        Dialog.Alert("请求失败，请稍后重试！");
+                        return;
+                    },
+                    timeout: 10000,
+                    success: function (data) {
+                        if (!data) {
+                            Dialog.Alert("请求失败，请稍后重试！");
+                            return;
+                        }
+                        if(data.status == 0){
+                            Dialog.Toast(data.msg);
+                        }else{
+                            Dialog.Toast(data.msg);
+                        }
+        
+                    }
+                });
+                
+	</script>
+</body>
+</html>
