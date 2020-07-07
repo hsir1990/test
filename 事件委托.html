@@ -38,3 +38,188 @@
     </script>
 </body>
 </html>
+<!--
+
+
+
+事件委托怎么实现：
+
+终于到了本文的核心部分了，哈哈，在介绍事件委托的方法之前，我们先来看一段一般方法的例子：
+
+子节点实现相同的功能：
+
+<ul id="ul1">
+    <li>111</li>
+    <li>222</li>
+    <li>333</li>
+    <li>444</li>
+</ul>
+实现功能是点击li，弹出123：
+
+复制代码
+window.onload = function(){
+    var oUl = document.getElementById("ul1");
+    var aLi = oUl.getElementsByTagName('li');
+    for(var i=0;i<aLi.length;i++){
+        aLi[i].onclick = function(){
+            alert(123);
+        }
+    }
+}
+复制代码
+ 上面的代码的意思很简单，相信很多人都是这么实现的，我们看看有多少次的dom操作，首先要找到ul，然后遍历li，然后点击li的时候，又要找一次目标的li的位置，才能执行最后的操作，每次点击都要找一次li；
+
+那么我们用事件委托的方式做又会怎么样呢？
+
+window.onload = function(){
+    var oUl = document.getElementById("ul1");
+   oUl.onclick = function(){
+        alert(123);
+    }
+}
+ 
+
+这里用父级ul做事件处理，当li被点击时，由于冒泡原理，事件就会冒泡到ul上，因为ul上有点击事件，所以事件就会触发，当然，这里当点击ul的时候，也是会触发的，那么问题就来了，如果我想让事件代理的效果跟直接给节点的事件效果一样怎么办，比如说只有点击li才会触发，不怕，我们有绝招：
+
+Event对象提供了一个属性叫target，可以返回事件的目标节点，我们成为事件源，也就是说，target就可以表示为当前的事件操作的dom，但是不是真正操作dom，当然，这个是有兼容性的，标准浏览器用ev.target，IE浏览器用event.srcElement，此时只是获取了当前节点的位置，并不知道是什么节点名称，这里我们用nodeName来获取具体是什么标签名，这个返回的是一个大写的，我们需要转成小写再做比较（习惯问题）：
+
+复制代码
+window.onload = function(){
+　　var oUl = document.getElementById("ul1");
+　　oUl.onclick = function(ev){
+　　　　var ev = ev || window.event;
+　　　　var target = ev.target || ev.srcElement;
+　　　　if(target.nodeName.toLowerCase() == 'li'){
+　 　　　　　　 alert(123);
+　　　　　　　  alert(target.innerHTML);
+　　　　}
+　　}
+}
+
+
+
+
+
+
+看一下正常的添加节点的方法：
+
+复制代码
+<input type="button" name="" id="btn" value="添加" />
+    <ul id="ul1">
+        <li>111</li>
+        <li>222</li>
+        <li>333</li>
+        <li>444</li>
+    </ul>
+复制代码
+ 
+
+现在是移入li，li变红，移出li，li变白，这么一个效果，然后点击按钮，可以向ul中添加一个li子节点
+
+ 
+
+复制代码
+window.onload = function(){
+            var oBtn = document.getElementById("btn");
+            var oUl = document.getElementById("ul1");
+            var aLi = oUl.getElementsByTagName('li');
+            var num = 4;
+            
+            //鼠标移入变红，移出变白
+            for(var i=0; i<aLi.length;i++){
+                aLi[i].onmouseover = function(){
+                    this.style.background = 'red';
+                };
+                aLi[i].onmouseout = function(){
+                    this.style.background = '#fff';
+                }
+            }
+            //添加新节点
+            oBtn.onclick = function(){
+                num++;
+                var oLi = document.createElement('li');
+                oLi.innerHTML = 111*num;
+                oUl.appendChild(oLi);
+            };
+        }
+复制代码
+ 
+
+这是一般的做法，但是你会发现，新增的li是没有事件的，说明添加子节点的时候，事件没有一起添加进去，这不是我们想要的结果，那怎么做呢？一般的解决方案会是这样，将for循环用一个函数包起来，命名为mHover，如下：
+
+复制代码
+window.onload = function(){
+            var oBtn = document.getElementById("btn");
+            var oUl = document.getElementById("ul1");
+            var aLi = oUl.getElementsByTagName('li');
+            var num = 4;
+            
+            function mHover () {
+                //鼠标移入变红，移出变白
+                for(var i=0; i<aLi.length;i++){
+                    aLi[i].onmouseover = function(){
+                        this.style.background = 'red';
+                    };
+                    aLi[i].onmouseout = function(){
+                        this.style.background = '#fff';
+                    }
+                }
+            }
+            mHover ();
+            //添加新节点
+            oBtn.onclick = function(){
+                num++;
+                var oLi = document.createElement('li');
+                oLi.innerHTML = 111*num;
+                oUl.appendChild(oLi);
+                mHover ();
+            };
+        }
+复制代码
+ 
+
+虽然功能实现了，看着还挺好，但实际上无疑是又增加了一个dom操作，在优化性能方面是不可取的，那么有事件委托的方式，能做到优化吗？
+
+复制代码
+window.onload = function(){
+            var oBtn = document.getElementById("btn");
+            var oUl = document.getElementById("ul1");
+            var aLi = oUl.getElementsByTagName('li');
+            var num = 4;
+            
+            //事件委托，添加的子元素也有事件
+            oUl.onmouseover = function(ev){
+                var ev = ev || window.event;
+                var target = ev.target || ev.srcElement;
+                if(target.nodeName.toLowerCase() == 'li'){
+                    target.style.background = "red";
+                }
+                
+            };
+            oUl.onmouseout = function(ev){
+                var ev = ev || window.event;
+                var target = ev.target || ev.srcElement;
+                if(target.nodeName.toLowerCase() == 'li'){
+                    target.style.background = "#fff";
+                }
+                
+            };
+            
+            //添加新节点
+            oBtn.onclick = function(){
+                num++;
+                var oLi = document.createElement('li');
+                oLi.innerHTML = 111*num;
+                oUl.appendChild(oLi);
+            };
+        }
+复制代码
+ 
+
+看，上面是用事件委托的方式，新添加的子元素是带有事件效果的，我们可以发现，当用事件委托的时候，根本就不需要去遍历元素的子节点，只需要给父级元素添加事件就好了，其他的都是在js里面的执行，这样可以大大的减少dom操作，这才是事件委托的精髓所在。
+
+
+
+
+
+-->
