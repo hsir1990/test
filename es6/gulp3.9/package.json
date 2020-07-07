@@ -1,0 +1,17 @@
+{
+  "name": "gulp3.9",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0"
+  }
+}
