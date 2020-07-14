@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./clone/zepto.js"></script>
+    <script>
+        $.get('http://www.tapread.com/app/ajax/category/list', function (response) {
+            $(document.body).append(response)
+        })
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
