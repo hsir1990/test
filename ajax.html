@@ -6,6 +6,7 @@
     <title>Document</title>
     <script type="text/javascript" src="./clone/zepto.js"></script>
     <script>
+        //测试本地打开是因为跨域原因，不能访问，不是没有服务器 不能启动ajax
         $.get('http://www.tapread.com/app/ajax/category/list', function (response) {
             $(document.body).append(response)
         })
