@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        //添加<script>标签的方法
+        function addScriptTag(src){
+            var script = document.createElement('script');
+            script.setAttribute("type","text/javascript");
+            script.src = src;
+            document.body.appendChild(script);
+        }
+        
+        window.onload = function(){
+            //搜索apple，将自定义的回调函数名result传入callback参数中
+            addScriptTag("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=apple&callback=result");
+            
+        }
+        //自定义的回调函数result
+        function result(data) {
+            //我们就简单的获取apple搜索结果的第一条记录中url数据
+            alert(data.responseData.results[0].unescapedUrl);
+        }
+        //http://ajax.googleapis.com/ajax/services/search/web===>callback({message:"success"});
+     </script>
+
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+    $.getJSON("http://localhost:20002/MyService.ashx?callback=?",function(data){
+        alert(data.name + " is a a" + data.sex);
+    });
+    //结果是一样的，要注意的是在url的后面必须添加一个callback参数，这样getJSON方法才会知道是用JSONP方式去访问服务，
+    //callback后面的那个问号是内部自动生成的一个回调函数名。这个函数名大家可以debug一下看看，比如jQuery17207481773362960666_1332575486681。
+</script>
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+// 当然，加入说我们想指定自己的回调函数名，或者说服务上规定了固定回调函数名该怎么办呢？我们可以使用$.ajax方法来实现(参数较多，详细可以参考http://api.jquery.com/jQuery.ajax)。先来看看如何实现吧：
+   $.ajax({
+        url:"http://localhost:20002/MyService.ashx?callback=?",   
+        dataType:"jsonp",
+        jsonpCallback:"person",
+        success:function(data){
+            alert(data.name + " is a a" + data.sex);
+        }
+   });
+   //没错，jsonpCallback就是可以指定我们自己的回调方法名person，远程服务接受callback参数的值就不再是自动生成的回调名，而是person。dataType是指定按照JSOPN方式访问远程服务。
+
+　　//利用jQuery可以很方便的实现JSONP来进行跨域访问。先暂时写到这吧。
+</script>
+</body>
+</html>

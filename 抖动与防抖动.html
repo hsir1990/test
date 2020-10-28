@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{margin:50px; }
+        #qq{position:relative;}
+        span{padding:0 4px}
+        </style>
+</head>
+<body>
+    <img id="qq" src="./body.jpg"  />
+    <script>
+        // mfx=function(isWin){
+        //         var t=0,z=3,del=function(){
+        //             clearInterval(mfx.ID);return mfx};
+        //             del().ID=setInterval(function(){
+        //                 var i=t/180*Math.PI,x=Math.sin(i)*z,y=Math.cos(i)*z,s=qq.style;
+        //                 isWin?window.moveBy(x,y):(s.top=x+'px',s.left=y+'px');
+        //                 if((t+=90)>1080)del();
+        //             },30);
+        // }
+        // setInterval("mfx()",500);
+
+
+
+
+        
+// // 将会包装事件的 debounce 函数
+// function debounce(fn, delay) {
+//   // 维护一个 timer
+//   let timer = null;
+ 
+//   return function() {
+//     // 通过 ‘this’ 和 ‘arguments’ 获取函数的作用域和变量
+//     let context = this;
+//     let args = arguments;
+ 
+//     clearTimeout(timer);
+//     timer = setTimeout(function() {
+//       fn.apply(context, args);
+//     }, delay);
+//   }
+// }
+
+
+// // 当用户滚动时被调用的函数
+// function foo() {
+//   console.log('You are scrolling!');
+ 
+// }
+ 
+// // 在 debounce 中包装我们的函数，过 2 秒触发一次
+// let elem = document.getElementById('container');
+// elem.addEventListener('scroll', debounce(foo, 2000));
+
+
+
+
+// function debouce(func,delay,immediate){
+//     var timer = null;
+//     return function(){
+//         var context = this;
+//         var args = arguments;
+//         if(timer) clearTimeout(timer);
+//         if(immediate){
+//             //根据距离上次触发操作的时间是否到达delay来决定是否要现在执行函数
+//             var doNow = !timer;
+//             //每一次都重新设置timer，就是要保证每一次执行的至少delay秒后才可以执行
+//             timer = setTimeout(function(){
+//                 timer = null;
+//             },delay);
+//             //立即执行
+//             if(doNow){
+//                 func.apply(context,args);
+//             }
+//         }else{
+//             timer = setTimeout(function(){
+//                 func.apply(context,args);
+//             },delay);
+//         }
+//     }
+// }
+
+
+
+// //时间戳
+// var throttle = function(func,delay){
+//     var prev = Date.now();
+//     return function(){
+//         var context = this;
+//         var args = arguments;
+//         var now = Date.now();
+//         if(now-prev>=delay){
+//             func.apply(context,args);
+//             prev = Date.now();
+//         }
+//     }
+// }
+
+//定时器
+var throttle = function(func,delay){
+    var timer = null
+ 
+    return function(){
+        var context = this;
+        var args = arguments;
+        if(!timer){
+            timer = setTimeout(function(){
+                func.apply(context,args);
+                timer = null;
+            },delay);
+        }
+    }
+}
+
+
+        </script>
+</body>
+</html>
