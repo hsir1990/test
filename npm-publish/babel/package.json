@@ -1,0 +1,12 @@
+{
+  "name": "@hsir1990/bable",
+  "version": "2.0.0",
+  "description": "搞一下团体的",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": []
+}
