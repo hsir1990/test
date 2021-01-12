@@ -2,10 +2,10 @@
 //--------注： 这是一种解决方案，下面代码，没有考虑兼容，和最优实现，但是整体流程是一种还不错的方案------//
 
 var toSmartScroll = (function() {
-    // 常量定义
+    // 常量定义 memory
     const STATUS_MEMORY = 1, //不在可视区，在内存中
         STATUS_VIEW = 2, // 在可视区
-        DATASET_ID = 'exSmartId';
+        DATASET_ID = 'exSmartId'; //dataset
 
     /**
      *  ----都懂得，通过闭包的形式，创建几个变量: 这几个变量想常住内存，有尼玛不想污染全局变量
@@ -98,7 +98,7 @@ var toSmartScroll = (function() {
         },
 
         /**
-         *  获取className
+         *  获取className，从而取得DOM
          */
         getByClassName: (className) => {
             if (document.getElementByClassName) {
