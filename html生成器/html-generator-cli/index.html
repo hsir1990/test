@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>${title}</title>
+  </head>
+  <body>
+	${title}
+	${title2}
+	<%
+		function product(args){
+			var ss = ''
+			args.forEach(function(val,key){
+					ss += '<P>'+val.name+'</P>';
+			})
+			return ss
+		}
+		%>
+
+	<%
+		function author(args){
+			var aa = ''
+			args.forEach(function(val,key){
+					aa += '<P>'+val+'</P>';
+			})
+			return aa
+		}
+		%>
+	
+  </body>
+</html>

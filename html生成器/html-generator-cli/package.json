@@ -1,0 +1,12 @@
+{
+  "name": "html-generator-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hsir1990",
+  "license": "ISC",
+  "bin": "index.js"
+}
