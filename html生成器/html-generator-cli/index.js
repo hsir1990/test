@@ -1,13 +1,16 @@
+#!/usr/bin/env node
+//上面那行的作用   Windows基于UNIX的系统不关心文件的扩展名（此处为“.js”），因此不知道使用哪种语言。我们必须告诉系统使用Node运行脚本,而且必须要在第一行
+
+
+
 /*
  * @Author: hsir1990
  * @Date: 2021-03-05 18:47:26
- * @LastEditTime: 2021-03-09 11:32:45
+ * @LastEditTime: 2021-03-10 17:41:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \baike\html-generator-cli\index.js
  */
-#!/usr/bin/env node
-//上面那行的作用   Windows基于UNIX的系统不关心文件的扩展名（此处为“.js”），因此不知道使用哪种语言。我们必须告诉系统使用Node运行脚本。
 const fs = require('fs');
 
 let title = 'title1';
@@ -78,7 +81,7 @@ function readFileHtml(arg){
 				// htmlData = htmlData.replace(/\$\{title\}/gm, '22')
 				// htmlData = htmlData.replace(re, '22')
 				var htmlMatch = htmlData.match(/\$\{[\S]{1,}(?=\})\}/gm)
-				// console.log(htmlMatch)
+				console.log(htmlMatch)
 				htmlMatch.forEach(function(val, key){
 					v = val.slice(2,val.length-1)
 					var re =new RegExp("\\$\\{" + v + "\\}","gm")
@@ -86,7 +89,7 @@ function readFileHtml(arg){
 				})
 	
 				var htmlMatchFor = htmlData.match(/<%[^%]{1,}(?=%>)/gm)
-				// console.log(htmlMatchFor)
+				console.log(htmlMatchFor)
 				htmlMatchFor.forEach(function(val, key){
 					let nameFunction = val.match(/function(\s\S*)\(args\)/)
 					nameFunction = nameFunction[1].trim();
@@ -124,4 +127,7 @@ function fileWrite(arg){
 
 console.log("READ FILE ASYNC END")
 
-//可用命令   html-generator-cli hell
+//可用命令      
+	// npm install -g ../html-generator-cli
+	// html-generator-cli hell
+	//注意匹配，自己练习使用
