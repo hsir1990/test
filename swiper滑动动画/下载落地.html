@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {				
+                    var clientWidth = docEl.clientWidth; //获取设备尺寸       
+                    if (!clientWidth) return;
+                    if(clientWidth>=750){ //设计稿宽度
+                        docEl.style.fontSize = '100px';
+                    }else{								
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false); //绑定事件
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+            
+        })(document, window);
+
+    </script>
+    <link rel="stylesheet" href="./swiper.min.css">
+    <style type="text/css">
+        /* body{font-family:Tahoma,"微软雅黑",Geneva,sans-serif;font-size:14px;margin:0px;padding:0px;-webkit-text-size-adjust:none;color:#4c4c4c;background: #fafafa;}
+        a{text-decoration:none}
+        input[type=button],input[type=text],input[type=number],input[type=password],textarea{-webkit-appearance:none;outline:none}
+        h1,h2,h3,h4{margin:0;padding:0;font-weight:normal}
+        ul,ol,li{list-style: none;margin:0;padding:0}
+        li{text-align: -webkit-match-parent;}
+        div{border-collapse:collapse;-webkit-tap-highlight-color: transparent;}
+        a{-webkit-tap-highlight-color: rgba(0,0,0,0)}
+        button,input,textarea{
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-user-modify:read-write-plaintext-only;
+        } */
+
+        /* .cl0{ clear:both;height:0; line-height:0; overflow:hidden}
+        .cl10{ clear:both;height:10px; line-height:0; overflow:hidden}
+        .cl20{ clear:both;height:20px; line-height:0; overflow:hidden}
+        .clearfix{zoom:1}.clearfix::after{visibility: hidden;display:block;font-size:0;content: ' ';clear: both;height:0;}
+        .red{color:#ff4644}
+        .gen{color:#4c7a22}
+        .udl{text-decoration:underline}
+        .s_gray{font-size:14px;color:#787878}
+        .gray{color:#787878}
+        .sf{font-size:14px}
+        .fl{ float:left}
+        .fr{ float:right}
+        .olnk{ text-align:center}.olnk img{width:100%;height:auto}
+        .sline{height:14px; overflow:hidden;border-top:1px solid #dfdfdf;border-bottom:1px solid #dfdfdf;background:#f2f2f2;}
+        .gline{background: #f2f2f2;height:15px;overflow: hidden}
+        .sbut{margin:12px 8px}
+        .sbut span,.sbut a{border:1px solid #dfdfdf;background:#f2f2f2;font-size:13px; line-height:36px;color:#4c4c4c;display:block;text-align:center;border-radius:3px}
+        .button_wap{display:-webkit-box; clear:both}
+        .button_wap a,.button_wap span,.button_wap input{border-radius:2px;height:38px; line-height:38px;font-size:18px; text-align:center; display:block;-webkit-box-flex:1;border:0;margin:0;padding:0;font-family:寰蒋闆呴粦;-webkit-appearance:none;}
+        .button_wap .c_red{background:#b33836;color:#fff;}
+        .button_wap .c_black{background:#5e5e5e;color:#fff;}
+        .wbox{border:1px solid #dfdfdf;border-width:1px 0 1px 0}
+        body.body{background: #f2f2f2} */
+        /* body.body-rem{font-size:100%}
+        bo */
+        *{ -webkit-tap-highlight-color: rgba(0,0,0,0);}
+        body,dl,dd,ul,ol,h1,h2,h3,h4,pre,optgroup,p,blockquote,hr,menu,dir{margin:0;padding:0}
+        ul li{list-style: none}
+        a{text-decoration:none;color: #999}
+        html{font-size:14px;width: 100%;-webkit-user-select:text;height: 100%}
+        input[type=button],input[type=text],input[type=tel],input[type=number],input[type=password],textarea,select{-webkit-appearance:none;outline:none;border: none}
+        body{font-family:'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;overflow-x:hidden;-ms-text-autospace:ideograph-alpha ideograph-numeric ideograph-parenthesis;text-autospace:ideograph-alpha ideograph-numeric ideograph-parenthesis;font-size:0.6rem;color: #333}
+        b,strong{font-weight:bold}
+        i,em{font-style:normal}
+        img{border:0 none;vertical-align:top;max-width: 100%}
+        em{display: inline-block;}
+        .red{color:#e85353}
+        .w-margin{margin: 0 0.85rem}
+        h3{font-weight: normal}
+        .flex{display:box; display: -webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;flex-direction: row;flex-wrap: wrap;justify-content:space-between}
+        .flex--fluid{-webkit-box-flex: 1;-moz-box-flex: 1;box-flex:1;-webkit-flex:1;-moz-flex:1;-ms-flex:1;flex:1}
+        .flex--lock{-webkit-flex:0 0 auto;-moz-flex:0 0 auto;-ms-flex:0 0 auto;flex:0 0 auto}
+        .flex--vertical{-webkit-flex-direction:column;-moz-flex-direction:column;-ms-flex-direction:column;flex-direction:column}
+        .flex--center{-webkit-box-pack: center;-webkit-flex-pack:center;-moz-flex-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;-moz-justify-content:center;-ms-justify-content:center;justify-content:center}
+        .flex--justify{-webkit-flex-pack:justify;-moz-flex-pack:justify;-ms-flex-pack:justify;-webkit-justify-content:space-between;-moz-justify-content:space-between;-ms-justify-content:space-between;justify-content:space-between;}
+        .flex--wrap{-webkit-flex-wrap:wrap;-moz-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap}
+        .flex--align_stretch{-webkit-box-align:stretch;-webkit-flex-align:stretch;-moz-flex-align:stretch;-ms-flex-align:stretch;-webkit-align-items:stretch;-moz-align-items:stretch;-ms-align-items:stretch;align-items:stretch}
+        .flex--align_center{-webkit-box-align:center;-webkit-flex-align:center;-moz-flex-align:center;-ms-flex-align:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center;align-items:center}
+
+        body,html{
+            overflow-x: hidden;
+            margin:0 auto;
+        }
+        
+       
+        .floater{
+            width: 6.90rem;
+            height: .90rem;
+            line-height: .9rem;
+            background: #f80909;
+            border-radius: .45rem;
+            font-size: .36rem;
+            font-family: PingFangSC, PingFangSC-Medium;
+            font-weight: 500;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing:.01rem;
+            position: fixed;
+            bottom: 1.00rem;
+            left: 50%;
+            margin-left: -3.45rem;
+        }
+        .top{
+            width: 100%;
+            height: 3rem;
+            background-color: #f80909;
+            position: relative;
+        }
+        .top .logo{
+            position: absolute;
+            left: 0rem;
+            top: 0rem;
+            width: .5rem;
+            height: .5rem;
+            background: url(https://static.zongheng.com/v2014/images/wcico.png) no-repeat left top;
+            background-size: .5rem .5rem;
+        }
+        .top .logo-title{
+            position: absolute;
+            left: 0rem;
+            top: 0rem;
+            width: .5rem;
+            height: .5rem;
+            background: url(https://static.zongheng.com/v2014/images/wcico.png) no-repeat left top;
+            background-size: .5rem .5rem;
+        }
+        .middle{
+            height: 5.4rem;
+            padding:0 .3rem;
+            overflow: hidden;
+        }
+        .middle #title{
+            padding: .24rem 0 .4rem;
+            text-align: center;
+        }
+        .middle #title .mid-title{
+            text-align: center;
+            font-size: .40rem;
+            font-family: PingFangSC, PingFangSC-Medium;
+            font-weight: 500;
+            color: #2d3035;
+            line-height: .40rem;
+        }
+        .middle #title .mid-p,.middle #title .mid-time{
+            font-size: .32rem;
+            font-family: PingFangSC, PingFangSC-Regular;
+            font-weight: 400;
+            color: #8d8e91;
+            line-height: .32rem;
+        }
+        .middle #title .mid-p{
+            padding:.24rem 0 .26rem;
+        }
+        .middle #title .mid-time i{
+            display: inline-block;
+            width: .40rem;
+            height: .36rem;
+            background: #2d3035;
+            border-radius:.06rem;
+            font-size: .28rem;
+            font-family: DIN, DIN-Medium;
+            font-weight: 500;
+            text-align: center;
+            color: #ffffff;
+            line-height: .36rem;
+        }
+        .bottom{
+            width: 100%;
+            padding: .4rem .16rem;
+            border-top: .2rem solid #f5f7f9;
+            padding-bottom: 1.5rem;
+        }
+        .bottom .books-items{
+            overflow: hidden;
+        }
+        .bottom .books-items .books-item{
+            float: left;
+            width: 1.52rem;
+            padding: 0 .14rem .4rem .14rem;
+        }
+        .bottom .books-items .book-img{
+            width: 1.52rem;
+            height: 2.02rem;
+            border:.01rem solid #dcdddf;
+            border-radius: .12rem;
+
+        }
+        .bottom .books-items .book-img img{
+            width: 100%;
+            height: 100%;
+        }
+        .bottom .books-items .book-title{
+            padding-top: .08rem;
+            font-size: .28rem;
+            height: .88rem;
+            font-family: PingFangSC, PingFangSC-Medium;
+            font-weight: 500;
+            text-align: justify;
+            color: #2d3035;
+            line-height: .44rem;
+            display: -webkit-box;
+            -webkit-box-orient: vertical; /* 表示盒子对象的子元素的排列方式 */
+            -webkit-line-clamp: 2; /* 限制文本的行数，表示文本第多少行省略 */
+            text-overflow: ellipsis;/*  打点展示 */
+            overflow: hidden;/*超出部分进行隐藏*/
+        }
+
+         /* body,.top,.middle,.bottom{
+            box-sizing: border-box;
+            width: 7.5rem;
+            margin: 0 auto;
+        }
+        .middle{
+            box-sizing: cotet-box;
+            width: auto;
+            margin: 0 auto;
+        } */
+        .swiper-container {
+            margin-top: .4rem;
+            width: 100%;
+            height: auto;
+            /* padding:.3rem 0;
+            margin-left: auto;
+            margin-right: auto; */
+            
+        }
+        .swiper-slide {
+            width: 3rem;
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            height: 2.8rem;
+            width: 2.1rem;
+
+         
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            transition-property:all;
+        }
+        .swiper-slide div,.swiper-slide div img{
+            border-radius: .12rem;
+            width: 100%;
+            height: 100%;
+        }
+        
+    html, body {
+      position: relative;
+      height: 100%;
+    }
+    body {
+      background: #eee;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color:#000;
+      margin: 0;
+      padding: 0;
+    }
+    /* .middle{
+            box-sizing: border-box;
+
+            margin: 0 auto;
+        }
+    .swiper-container {
+        margin-top: .4rem;
+      width: 100%;
+      height: 100%;
+    }
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+	  transition: 300ms;
+	  transform: scale(0.7);
+
+      height: 2.8rem;
+        width: 2.1rem;
+        z-index: 6;
+    }
+	.swiper-slide-active,.swiper-slide-duplicate-active{
+      transform: scale(1);
+	}
+    .swiper-slide-active,.swiper-slide-duplicate-active{
+        transform: scale(1);
+        z-index: 9;
+    }
+    .swiper-slide-prev,.swiper-slide-next{
+        transform: scale(.85);
+        z-index: 8;
+    }
+    .swiper-slide div,.swiper-slide div img{
+        border-radius: .12rem;
+        width: 100%;
+        height: 100%;
+    }
+   */
+    </style>
+    <script type="text/javascript" src="https://static.zongheng.com/h5/js/zepto.min.js?v=44742"></script>
+</head>
+<body>
+    <header class="top">
+        <div class="logo"></div>
+        <div class="logo-title"></div>
+    </header>
+    <section class="middle">
+        <div class="swiper-container">
+            <div class="swiper-wrapper" >
+                <div class="swiper-slide  go-datail" data-name="大卫1" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫2" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫3" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫4" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <!-- <div class="swiper-slide  go-datail" data-name="大卫5" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫6" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫7" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫8" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div>
+                <div class="swiper-slide  go-datail" data-name="大卫9" data-p="你撒旦发射点" data-time="222"  data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                    <div><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg"/></div>
+                </div> -->
+            </div>
+          </div>
+        <div id="title">
+            <div class="mid-title">大魏芳华</div>
+            <div class="mid-p">异世大陆 · 2057万字 · 连载中</div>
+            <div class="mid-time">
+                限免倒计时&nbsp;&nbsp;<i>06</i>&nbsp;:&nbsp;<i>12</i>&nbsp;:&nbsp;<i>28</i>
+            </div>
+        </div>
+        <!-- <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 5"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 6"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 7"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 8"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 9"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 10"></span></div>
+  <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div> -->
+    </section>
+    <footer  class="bottom">
+        <div class="books-items">
+            <div class="books-item go-datail" data-bookid="1111" data-url="/h5/book?bookid=1190533&h5=1&fpage=33&fmodule=308&_st=33_308-1_1190533">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名书名书名书名书名书名书名书名书名书名书名书名书名书名书名书名书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+            <div class="books-item">
+                <div  class="book-img"><img src="http://rcode.zongheng.com/act/2022/408/h5/images/book_0.jpg" /></div>
+                <div  class="book-title">书名</div>
+            </div>
+        </div>
+    </footer>
+    <div class="floater">新用户领免费特权</div>
+    <script src="./swiper.min.js"></script>
+    <script>
+
+
+        // var swiper = new Swiper('.swiper-container', {
+        //     slidesPerView: 5,
+        //     spaceBetween: 30,
+        //     centeredSlides: true,
+        //     loop: true,
+        //     spaceBetween: -70, //在slide之间设置距离（单位px）
+        //     slidesOffsetBefore : -13, //设定slide与左边框的预设偏移量（单位px）。
+        //     on:{
+        //         slideChangeTransitionEnd: function(){
+        //             // console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+        //             // console.log('大苏打',$('.swiper-container .swiper-slide').length)
+        //             // var index = this.activeIndex
+                    
+        //             // // setTimeout(function(){
+        //             //     slideDom = $('.swiper-container .swiper-slide')
+        //             //     slideDom.eq(index+3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // // },10)
+        //             // // slideDom.eq(index+3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // // slideDom.eq(index-3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // slideDom.forEach(function(value,key){
+        //             //     $(value).css({'z-index':1})
+        //             //     slideDom.eq(index).css({'z-index':5,'transform': 'scale(1)'})
+        //             //     slideDom.eq(index+1).css({'z-index':4,'transform': 'scale(.85)'})
+        //             //     slideDom.eq(index+2).css({'z-index':3,'transform': 'scale(.7)'})
+        //             //     slideDom.eq(index+3).css({'z-index':2,'transform': 'scale(.55)'})
+        //             //     slideDom.eq(index-1).css({'z-index':4,'transform': 'scale(.85)'})
+        //             //     slideDom.eq(index-2).css({'z-index':3,'transform': 'scale(.7)'})
+        //             //     slideDom.eq(index-3).css({'z-index':2,'transform': 'scale(.55)'})
+        //             // });
+        //         },
+        //         slideChange:function(){
+        //             // console.log(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+        //             // console.log('大苏打',$('.swiper-container .swiper-slide').length)
+        //             // var index = this.activeIndex
+                    
+        //             // // setTimeout(function(){
+        //             //     slideDom = $('.swiper-container .swiper-slide')
+        //             //     slideDom.eq(index+3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // // },10)
+        //             // // slideDom.eq(index+3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // // slideDom.eq(index-3).css({'z-index':5,'transform': 'scale(.55)'})
+        //             // slideDom.forEach(function(value,key){
+        //             //     $(value).css({'z-index':1})
+                        
+        //             // });
+        //             // slideDom.eq(index).css({'z-index':5,'transform': 'scale(1)'})
+        //             //     slideDom.eq(index+1).css({'z-index':4,'transform': 'scale(.85)'})
+        //             //     slideDom.eq(index+2).css({'z-index':3,'transform': 'scale(.7)'})
+        //             //     slideDom.eq(index+3).css({'z-index':2,'transform': 'scale(.55)'})
+        //             //     slideDom.eq(index-1).css({'z-index':4,'transform': 'scale(.85)'})
+        //             //     slideDom.eq(index-2).css({'z-index':3,'transform': 'scale(.7)'})
+        //             //     slideDom.eq(index-3).css({'z-index':2,'transform': 'scale(.55)'})
+        //         }
+        //     }
+        //     // pagination: {
+        //     //     el: '.swiper-pagination',
+        //     //     clickable: true,
+        //     // },
+        // });
+  
+
+
+           var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: {
+                disableOnInteraction: false
+            },
+            // autoplay:{
+            // 	disableOnInteraction: false,
+            // 	delay:2000,
+            // },//等同于以下设置
+            speed: 100, //切换速度，即slider自动滑动开始到结束的时间（单位ms）
+            freeMode:false, //关闭自由模式,到一个位置会自动划过去
+            slidesPerView: 5,  //展示5个图
+            spaceBetween: -30, //在slide之间设置距离（单位px）
+            slidesOffsetBefore : -11, //设定slide与左边框的预设偏移量（单位px）。
+            centeredSlides : true,  //居中幻灯片。设定为true时，当前的active slide 会居中，而不是默认状态下的居左。
+            watchSlidesProgress : true,//Progress（进度、进程）分为swiper的progress 和每个slide单独的progress。开启这个参数来计算每个slide的progress，Swiper的progress无需设置即开启。
+            on: {
+                slideChangeTransitionEnd: function(){  //swiper从一个slide过渡到另一个slide结束时执行。
+                    console.log('-------------------',this.activeIndex);//切换结束时，告诉我现在是第几个slide
+                    // alert(this.activeIndex);//切换结束时，告诉我现在是第几个slide
+                },
+                setTranslate: function(){  //当设置wrapper的偏移量时执行。可选swiper对象和wrapper的偏移量作为参数。  //freeMode模式下不生效
+                    slides = this.slides
+                    var index = 0
+                    for(i=0; i< slides.length; i++){
+                        slide = slides.eq(i)
+                        progress = slides[i].progress
+                        // slide.html(progress.toFixed(2)); //看清楚progress是怎么变化的
+                        if(progress < 0){
+                            slide.css({'opacity': '','z-index': progress.toFixed(0),'background': '#ff0'})
+                            console.log(this.activeIndex)
+                            slideDom = $('.swiper-container .swiper-slide').eq(this.activeIndex)
+                            var name = slideDom.data('name')
+                            var tip = slideDom.data('p')
+                            var strDom ='<div class="mid-title">'+name+'</div>'+
+                                        '<div class="mid-p">'+tip+'</div>'+
+                                        '<div class="mid-time">限免倒计时&nbsp;&nbsp;<i>06</i>&nbsp;:&nbsp;<i>12</i>&nbsp;:&nbsp;<i>28</i></div>'
+                            $('#title').html(strDom)
+                        }else{
+                            slide.css({'opacity': '','z-index': 0,'background': '#ff0'});
+                        }
+                        slide.transform('');//清除样式
+                        slide.transform('scale('+(1 - Math.abs(progress)/8)+')');  
+
+                        // slide.transform('translate3d(0,0, '+ progress*20+'px)'+' scale('+(1 - Math.abs(progress)/8)+')');  
+                    }	
+                    
+                },
+                setTransition: function(transition) {  //每当设置Swiper开始过渡动画时执行。transtion获取到的是Swiper的speed值。
+                    for (var i = 0; i < this.slides.length; i++) {
+                        var slide = this.slides.eq(i)
+                        slide.transition(transition);
+                    }
+                },
+                // slideChangeTransitionEnd: function() {
+                //     var imgurl = $('.swiper-slide-active img').attr("src");
+                //     var txt = $('.swiper-slide-active').html();
+                //     console.log("内容："+txt+"===索引值："+this.activeIndex+"===图片地址："+imgurl);
+
+                //     // const titleList = ['智联线上招聘会','猎聘线上招聘会','一览线上招聘会'];
+                //     // const index = Number(this.activeIndex);
+                //     // console.log(index)
+                //     // document.getElementById('title').innerText = titleList[index];
+                // },
+            },
+            // pagination: {
+            //     el: '.swiper-pagination',
+            //     clickable: true,
+            // },
+        });
+
+
+
+
+// $('#swiper-wrapper .swiper-slide').removeClass('swiper-init');
+	// var mySwiper = new Swiper ('.swiper-container', {
+	// 	direction: 'horizontal',
+	// 	watchSlidesProgress: true,
+	// 	loop: true,
+	// 	autoplay: {
+	// 		disableOnInteraction: false
+	// 	},
+	// 	touchMoveStopPropagation: false,
+	// 	slidesPerView: "auto",
+	// 	centeredSlides: true,
+	// 	// spaceBetween: -(24/50)*ROOTSIZE,
+	// 	// spaceBetween: 10,
+	// 	pagination: {
+	// 		el: '.swiper-pagination'
+	// 	},
+	// 	lazy: {
+	// 		loadPrevNext: true,
+	// 	},
+	// 	on: {		// swiper4.x.x才可以使用这个功能
+	// 		progress: function(progress) {
+	// 			// for(i = 0; i < this.slides.length; i++) {
+	// 			// 	var slide = this.slides.eq(i);
+	// 			// 	var slideProgress = Math.abs(this.slides[i].progress);
+	// 			// 	if(slideProgress>=0 && slideProgress <= 1) {
+	// 			// 		var scale = (20*(1-slideProgress) + 80)/100
+	// 			// 		slide.transform('scale(' + scale + ')');
+	// 			// 	}else{
+	// 			// 		slide.transform('scale(0.8)');
+	// 			// 	}
+	// 			// }
+	// 		},
+	// 		setTransition: function(transition) {
+	// 			for (var i = 0; i < this.slides.length; i++) {
+	// 				var slide = this.slides.eq(i)
+	// 				slide.transition(transition);
+	// 			}
+	// 		},
+	// 		lazyImageReady: function(slideEl, imageEl) {
+	// 			imageEl.onerror = function() {
+	// 				imageEl.remove()
+	// 			}
+	// 		}
+	// 	}
+	// })
+
+
+    
+
+     
+        
+    
+    //   setTimeout(function(){
+    //       $('body').css({'width':'7.5rem','margin':'0 auto'})
+    //   },100)
+
+
+    //跳转书籍详情
+    $(document).on('click','.go-datail',function(){
+        window.location.href=$(this).data('url')
+    })
+
+    // 设置倒计时
+    var leftTime = parseInt($('body').attr('data-time'))
+    countDown(leftTime)
+	function countDown(timer) {
+		var timer = Math.floor(timer / 1000)
+		xr(timer)
+		var T = setInterval(function() {
+			timer -= 1
+			if(timer <= 0) {
+				leftTime = 0
+				clearInterval(T)
+				return
+			}
+			$('.period-tip .timer').text(xr(timer))
+		}, 1000)
+		// 渲染时间
+		function xr(timer) {
+			var H = Math.floor(timer / 3600) > 9 ? Math.floor(timer / 3600) : '0' + Math.floor(timer / 3600)
+			var O = timer % 3600
+			var M = Math.floor(O / 60) > 9 ? Math.floor(O / 60) : '0' + Math.floor(O / 60)
+			var S = O % 60 > 9 ? O % 60 : '0' + O % 60
+			return H + ' H : '+ M +' Min : '+ S +' S'
+		}
+	}
+
+    // //下载领取新用户特权    帮助利用jsp去操作
+    // $(document).on('click','.floater',function(){
+    //     // window.location.href=$(this).data('url')
+    // })
+      </script>
+</body>
+</html>
